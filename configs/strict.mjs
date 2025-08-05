@@ -1,5 +1,6 @@
 // @ts-check
 
+/** @type {import('eslint').Linter.Config} */
 export const strictConfig = {
   languageOptions: {
     globals: {
