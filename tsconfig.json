@@ -1,7 +1,14 @@
 {
+  "include": [
+    "**/*.js",
+    "**/*.mjs",
+    "**/*.jsx",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": ["node_modules"],
   "compilerOptions": {
     "allowJs": true,
-    "maxNodeModuleJsDepth": 1,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
