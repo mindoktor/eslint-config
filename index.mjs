@@ -1,4 +1,6 @@
-// index.js
+// @ts-check
+
+
 export default [
 	{
 		languageOptions: {
