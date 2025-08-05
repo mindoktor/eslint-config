@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# IMPORTANT: This file is duplicated in both the mindoktor and mindoktor-app repos. Any changes
+# should be synched.
+
+branch_name=$(git rev-parse --abbrev-ref HEAD)
+
+# Check for mixed case (branch names should be all lowercase)
+if [[ "$branch_name" =~ [A-Z] ]]; then
+    # The >&2 sends the messages to stderr, ensuring they are displayed in git clients.
+    echo "Error: Branch name '$branch_name' contains uppercase letters." >&2
+    echo "Branch names must be all lowercase." >&2
+
+    # Reject the push
+    exit 1
+fi
+
+# Allow the push
+exit 0
