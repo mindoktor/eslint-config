@@ -15,5 +15,6 @@ jobs:
       with:
         node-version: current
         cache: 'yarn'
+    - run: yarn install --frozen-lockfile
     - run: yarn lint
     - run: yarn typecheck
