@@ -3,6 +3,5 @@
 import { mindoktorRecommended } from "./configs/recommended.mjs";
 
 
-export default [
-	mindoktorRecommended
-];
+export default mindoktorRecommended
+

@@ -1,9 +1,16 @@
-import { defineConfig } from "eslint/config";
 import minDoktorEsLintConfig from './index.mjs'
 
-export default defineConfig([
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
 	{
-		files: ["**/*.(js|mjs|cjs|ts|jsx|tsx)"],
-		extends: [minDoktorEsLintConfig],
-	},
-]);
+    ignores: ['**/node_modules/**/*'],
+		extends: [
+			minDoktorEsLintConfig,
+		],
+		rules: {
+			// ...
+		},
+	}
+);
+
