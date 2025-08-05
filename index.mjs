@@ -1,16 +1,8 @@
 // @ts-check
 
+import { strictConfig } from "./configs/strict.mjs";
+
 
 export default [
-	{
-		languageOptions: {
-			globals: {
-				MyGlobal: true,
-			},
-		},
-
-		rules: {
-			semi: [2, "always"],
-		},
-	},
+	strictConfig
 ];
