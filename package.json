@@ -1,6 +1,7 @@
 {
   "name": "@mindoktor/eslint-config",
   "version": "0.0.1",
+  "type": "module",
   "description": "Shared ESLint config for MinDoktor projects",
   "main": "index.js",
   "repository": "git@github.com:mindoktor/eslint-config.git",
