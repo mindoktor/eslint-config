@@ -1,8 +1,8 @@
 // @ts-check
 
-import { strictConfig } from "./configs/strict.mjs";
+import { mindoktorRecommended } from "./configs/recommended.mjs";
 
 
 export default [
-	strictConfig
+	mindoktorRecommended
 ];

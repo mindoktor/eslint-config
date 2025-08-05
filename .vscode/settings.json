@@ -13,6 +13,7 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "files.insertFinalNewline": true,
   "cSpell.words": [
+    "mindoktor",
     "unbook"
   ]
 }

@@ -1,7 +1,7 @@
 // @ts-check
 
-/** @type {import('eslint').Linter.Config} */
-export const strictConfig = {
+/** @type {import('eslint').Linter.Config[]} */
+export const mindoktorRecommended = [{
   languageOptions: {
     globals: {
       MyGlobal: true,
@@ -11,4 +11,4 @@ export const strictConfig = {
   rules: {
     semi: [2, "always"],
   },
-}
+}]
