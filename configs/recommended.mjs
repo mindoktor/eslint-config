@@ -15,9 +15,25 @@ export const mindoktorRecommended = tseslint.config(
       tseslint.configs.recommendedTypeChecked,
     ],
     rules: {
-    // ...
-  },
-  
+      // // Return types should not be mandatory
+      // '@typescript-eslint/explicit-function-return-type': 'off',
+
+      // // Warn when using '@ts-ignore' declarations (default is "error")
+      // '@typescript-eslint/prefer-ts-expect-error': 'warn',
+
+      // Do not complain of vars and args prefixed with _
+      '@typescript-eslint/no-unused-vars': [
+        'off',
+        {
+          vars: 'all',
+          varsIgnorePattern: '^_',
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+        },
+      ],
+
+      curly: ['error', 'all'],
+    },
 },   {
     languageOptions: {
       parserOptions: {
