@@ -2,11 +2,6 @@
 
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
-import { fileURLToPath } from 'node:url';
-import path from 'node:path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export const mindoktorRecommended = tseslint.config(
   {
@@ -23,7 +18,7 @@ export const mindoktorRecommended = tseslint.config(
 
       // Do not complain of vars and args prefixed with _
       '@typescript-eslint/no-unused-vars': [
-        'off',
+        'error',
         {
           vars: 'all',
           varsIgnorePattern: '^_',
@@ -38,7 +33,6 @@ export const mindoktorRecommended = tseslint.config(
     languageOptions: {
       parserOptions: {
         projectService: true,
-        tsconfigRootDir: __dirname,
       },
     },
-  },);
+  });
