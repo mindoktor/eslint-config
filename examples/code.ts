@@ -2,28 +2,28 @@
 
 const c = 5;
 
-const obj = {
+const _obj = {
   a: 1,
   b: 2,
   c: c,
 };
 
-const myFunction = (x: number) => {
+const _myFunction = (x: number) => {
   return x * 2;
 };
 
 const myAsyncFunction = async (x: number): Promise<number> => {
-  return x * 2;
+  return await Promise.resolve(x * 2);
 };
 
-const funcUsingAwaitedAsync = async () => {
-  const result = await myAsyncFunction(5);
+const _funcUsingAwaitedAsync = async () => {
+  const _result = await myAsyncFunction(5);
 };
 
-const funcUsingNonAwaitedAsync = () => {
-  const promiseResult = myAsyncFunction(10);
+const _funcUsingNonAwaitedAsync = () => {
+  const _promiseResult = myAsyncFunction(10);
 };
 
-const funcUsingNonAwaitedAsyncSideEffect = () => {
-  myAsyncFunction(15);
+const _funcUsingNonAwaitedAsyncSideEffect = () => {
+  void myAsyncFunction(15);
 }
