@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "eslint": ">= 9"
+    "eslint": ">=9"
   },
   "devDependencies": {
     "eslint": ">=9",
