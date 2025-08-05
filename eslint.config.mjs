@@ -9,6 +9,7 @@ export default tseslint.config(
 			minDoktorEsLintConfig,
 		],
 		rules: {
+      // Custom rules can be added here
 			// ...
 		},
 	}
