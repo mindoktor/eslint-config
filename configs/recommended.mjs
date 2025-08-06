@@ -10,9 +10,6 @@ export const mindoktorRecommended = tseslint.config(
       tseslint.configs.strictTypeChecked,
     ],
     rules: {
-      // // Return types should not be mandatory
-      '@typescript-eslint/explicit-function-return-type': 'off',
-
       // // Warn when using '@ts-ignore' declarations (default is "error")
       '@typescript-eslint/prefer-ts-expect-error': 'warn',
 
