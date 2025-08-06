@@ -7,7 +7,7 @@ export const mindoktorRecommended = tseslint.config(
   {
     extends: [
       eslint.configs.recommended,
-      tseslint.configs.recommendedTypeChecked,
+      tseslint.configs.strictTypeChecked,
     ],
     rules: {
       // // Return types should not be mandatory
@@ -29,10 +29,10 @@ export const mindoktorRecommended = tseslint.config(
 
       curly: ['error', 'all'],
     },
-},   {
-    languageOptions: {
-      parserOptions: {
-        projectService: true,
-      },
+  }, {
+  languageOptions: {
+    parserOptions: {
+      projectService: true,
     },
-  });
+  },
+});
