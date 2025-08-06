@@ -24,6 +24,12 @@ export const mindoktorRecommended = tseslint.config(
         },
       ],
 
+      // Allow template literals with numbers and booleans E.g. `${42}-${true}`
+      "@typescript-eslint/restrict-template-expressions": ['error', {
+        allowNumber: true,
+        allowBoolean: true,
+      }],
+
       curly: ['error', 'all'],
     },
   }, {
