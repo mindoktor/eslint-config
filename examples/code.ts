@@ -26,4 +26,9 @@ const _funcUsingNonAwaitedAsync = () => {
 
 const _funcUsingNonAwaitedAsyncSideEffect = () => {
   void myAsyncFunction(15);
-}
+};
+
+const meaningOfLife = 42;
+const isTrue = true;
+
+const _templateLiteral = `Example: ${meaningOfLife}-${isTrue}`;
