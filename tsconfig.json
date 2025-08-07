@@ -4,10 +4,15 @@
     "**/*.mjs",
     "**/*.jsx",
     "**/*.ts",
+    "**/*.d.ts",
     "**/*.tsx"
   ],
   "exclude": ["node_modules"],
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@mindoktor/eslint-config/*": ["./*"]
+    },
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
