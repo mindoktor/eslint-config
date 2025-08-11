@@ -19,7 +19,7 @@ export const mindoktorRecommended = tseslint.config(
         },
       ],
 
-      // // Allow template literals with numbers and booleans E.g. `${42}-${true}`
+      // Allow template literals with numbers and booleans E.g. `${42}-${true}`
       ...extendFromConfigDefaults(
         tseslint.configs.strictTypeChecked,
         '@typescript-eslint/restrict-template-expressions',
