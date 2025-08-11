@@ -2,7 +2,7 @@
 
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
-import { extendFromConfigDefaults } from './utls/config.mjs';
+import { extendFromConfigDefaults } from './utils/config.mjs';
 
 export const mindoktorRecommended = tseslint.config(
   {
