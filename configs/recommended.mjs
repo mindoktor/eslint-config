@@ -6,7 +6,11 @@ import { extendFromConfigDefaults } from './utls/config.mjs';
 
 export const mindoktorRecommended = tseslint.config(
   {
-    extends: [eslint.configs.recommended, tseslint.configs.strictTypeChecked],
+    extends: [
+      eslint.configs.recommended,
+      tseslint.configs.strictTypeChecked,
+      tseslint.configs.stylisticTypeChecked,
+    ],
     rules: {
       // Do not complain of vars and args prefixed with _
       '@typescript-eslint/no-unused-vars': [
