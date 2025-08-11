@@ -12,6 +12,9 @@ export const mindoktorRecommended = tseslint.config(
       tseslint.configs.stylisticTypeChecked,
     ],
     rules: {
+      "@typescript-eslint/consistent-type-exports": "error",
+      "@typescript-eslint/consistent-type-imports": "error",
+      
       // Do not complain of vars and args prefixed with _
       '@typescript-eslint/no-unused-vars': [
         'error',
