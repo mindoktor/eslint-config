@@ -7,7 +7,7 @@
  * @param {string} ruleName
  */
 const extractRuleFromConfig = (config, ruleName) => {
-  const rule = config.find((c) => c.rules && c.rules[ruleName]);
+  const rule = config.find((c) => c.rules?.[ruleName] != null);
   return rule?.rules?.[ruleName];
 };
 
