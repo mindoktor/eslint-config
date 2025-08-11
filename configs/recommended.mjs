@@ -32,6 +32,10 @@ export const mindoktorRecommended = tseslint.config(
         ]
       ),
 
+      // We want to enforce strict boolean expressions to avoid unintended type coercion
+      // https://typescript-eslint.io/rules/strict-boolean-expressions
+      '@typescript-eslint/strict-boolean-expressions': 'error',
+
       curly: ['error', 'all'],
     },
   },
