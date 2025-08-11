@@ -8,9 +8,6 @@ export const mindoktorRecommended = tseslint.config(
   {
     extends: [eslint.configs.recommended, tseslint.configs.strictTypeChecked],
     rules: {
-      // // Warn when using '@ts-ignore' declarations (default is "error")
-      '@typescript-eslint/prefer-ts-expect-error': 'warn',
-
       // Do not complain of vars and args prefixed with _
       '@typescript-eslint/no-unused-vars': [
         'error',
