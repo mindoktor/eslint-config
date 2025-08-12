@@ -11,6 +11,7 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "build": "tsc",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
