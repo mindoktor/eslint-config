@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // Example code snippet demonstrating ESLint configuration
 
 const c = 5;
@@ -13,11 +14,11 @@ const myFunction = (x: number) => {
 };
 
 const myAsyncFunction = async (x: number): Promise<number> => {
-  return x * 2;
+  return await Promise.resolve(x * 2);
 };
 
 const funcUsingAwaitedAsync = async () => {
-  const result = await myAsyncFunction(5);
+  const _result = await myAsyncFunction(5);
 };
 
 const funcUsingNonAwaitedAsync = () => {
@@ -25,5 +26,10 @@ const funcUsingNonAwaitedAsync = () => {
 };
 
 const funcUsingNonAwaitedAsyncSideEffect = () => {
-  myAsyncFunction(15);
-}
+  void myAsyncFunction(15);
+};
+
+const meaningOfLife = 42;
+const isTrue = true;
+
+const templateLiteral = `Example: ${meaningOfLife}-${isTrue}`;
