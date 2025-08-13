@@ -19,7 +19,8 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "cleanbuild": "yarn clean && yarn build",
-    "prepare": "yarn build"
+    "prepare": "yarn build",
+    "postinstall": "yarn build"
   },
   "peerDependencies": {
     "eslint": ">=9",
