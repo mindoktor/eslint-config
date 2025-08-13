@@ -18,7 +18,8 @@
     "lint:fix": "eslint . --fix",
     "build": "tsc",
     "typecheck": "tsc --noEmit",
-    "cleanbuild": "yarn clean && yarn build"
+    "cleanbuild": "yarn clean && yarn build",
+    "prepare": "yarn build"
   },
   "peerDependencies": {
     "eslint": ">=9",
