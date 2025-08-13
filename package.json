@@ -8,9 +8,9 @@
   "license": "MIT",
   "private": false,
   "main": "./dist/src/index.mjs",
-  "types": "dist/src/index.d.ts",
+  "types": "./dist/src/index.d.ts",
   "exports": {
-    ".": "./dist"
+    ".": "./dist/src"
   },
   "scripts": {
     "lint": "eslint .",
