@@ -13,9 +13,6 @@
     "outDir": "./dist",
     "rootDir": ".",
     "baseUrl": "./src",
-    "paths": {
-      "@mindoktor/eslint-config/*": ["./*"]
-    },
     "declaration": true,
     "sourceMap": true,
     "allowJs": true,
