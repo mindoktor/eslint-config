@@ -7,10 +7,12 @@
   "author": "Min Doktor Devs",
   "license": "MIT",
   "private": false,
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
   "exports": {
-    ".": "./dist/src"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
     "clean": "rm -rf dist",
