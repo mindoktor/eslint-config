@@ -1,4 +1,4 @@
-import minDoktorEsLintConfig from './src/index';
+import minDoktorEsLintConfig from './src/index.js';
 import { globalIgnores } from 'eslint/config';
 
 import tseslint from 'typescript-eslint';

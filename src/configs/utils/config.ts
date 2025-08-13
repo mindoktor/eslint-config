@@ -5,8 +5,8 @@ import type {
   RuleEntry,
   RuleLevel,
   RulesRecord,
-} from './types';
-import { isRuleLevelAndOptions } from './types';
+} from './types.js';
+import { isRuleLevelAndOptions } from './types.js';
 
 const extractRuleFromConfig = <
   TRuleName extends string,
