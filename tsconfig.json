@@ -6,7 +6,7 @@
     "**/*.ts",
     "**/*.d.ts",
     "**/*.tsx",
-    "eslint.config.mjs"
+    "eslint.config.ts"
   ],
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
