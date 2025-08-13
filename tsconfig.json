@@ -17,6 +17,7 @@
       "@mindoktor/eslint-config/*": ["./*"]
     },
     "declaration": true,
+    "sourceMap": true,
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
