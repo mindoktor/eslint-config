@@ -13,10 +13,12 @@
     ".": "./dist/src"
   },
   "scripts": {
+    "clean": "rm -rf dist",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "build": "tsc",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "cleanbuild": "yarn clean && yarn build"
   },
   "peerDependencies": {
     "eslint": ">=9"
