@@ -1,10 +1,9 @@
-import type { Linter } from "eslint";
+import type { Linter } from 'eslint';
 
 // Alias types for convenience
 type RuleSeverity = Linter.RuleSeverity;
 type RulesRecord = Linter.RulesRecord;
 type RuleEntry = Linter.RuleEntry;
-
 
 import type {
   InferredRuleEntryFromConfig,
@@ -21,7 +20,9 @@ const extractRuleFromConfig = <
   ruleName: TRuleName
 ): InferredRuleEntryFromConfig<TRuleName, TConfigArray> | undefined => {
   const config = configArray.find((c) => c.rules?.[ruleName] != null);
-  return config?.rules?.[ruleName] as InferredRuleEntryFromConfig<TRuleName, TConfigArray> | undefined;
+  return config?.rules?.[ruleName] as
+    | InferredRuleEntryFromConfig<TRuleName, TConfigArray>
+    | undefined;
 };
 
 const extractRuleOptions = <TRuleEntry extends RuleEntry>(
@@ -47,10 +48,7 @@ const squashOptions = <T extends Record<string, unknown>>(options: T[]): T => {
 type OverridesType<
   TRuleName extends string,
   TConfigArray extends RulesConfig[]
-> = Exclude<
-    InferredRuleEntryFromConfig<TRuleName, TConfigArray>,
-    RuleSeverity
-  >;
+> = Exclude<InferredRuleEntryFromConfig<TRuleName, TConfigArray>, RuleSeverity>;
 
 /**
  * This is required to extend a rule from a config with the default options.
@@ -72,14 +70,15 @@ export const extendFromConfigDefaults = <
   }
 
   // Easier to handle inside this function
-  type BroadRuleOptionsType = Record<
-    string,
-    unknown
-  >[]
+  type BroadRuleOptionsType = Record<string, unknown>[];
 
   const overrideRuleLevel = overrides[0];
-  const defaultOptions = squashOptions(extractRuleOptions(rule) as BroadRuleOptionsType);
-  const overrideOptions = squashOptions(extractRuleOptions(overrides) as BroadRuleOptionsType);
+  const defaultOptions = squashOptions(
+    extractRuleOptions(rule) as BroadRuleOptionsType
+  );
+  const overrideOptions = squashOptions(
+    extractRuleOptions(overrides) as BroadRuleOptionsType
+  );
 
   return {
     [ruleName]: [
