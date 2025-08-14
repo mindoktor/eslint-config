@@ -1,16 +1,21 @@
+import type { Linter } from "eslint";
+
+// Alias types for convenience
+type RuleSeverity = Linter.RuleSeverity;
+type RulesRecord = Linter.RulesRecord;
+type RuleEntry = Linter.RuleEntry;
+
+
 import type {
-  ConfigArray,
   InferredRuleEntryFromConfig,
   InferredRuleOptions,
-  RuleEntry,
-  RuleLevel,
-  RulesRecord,
+  RulesConfig,
 } from './types.js';
 import { isRuleLevelAndOptions } from './types.js';
 
 const extractRuleFromConfig = <
   TRuleName extends string,
-  TConfigArray extends ConfigArray
+  TConfigArray extends RulesConfig[]
 >(
   configArray: TConfigArray,
   ruleName: TRuleName
@@ -41,10 +46,10 @@ const squashOptions = <T extends Record<string, unknown>>(options: T[]): T => {
 
 type OverridesType<
   TRuleName extends string,
-  TConfigArray extends ConfigArray
+  TConfigArray extends RulesConfig[]
 > = Exclude<
     InferredRuleEntryFromConfig<TRuleName, TConfigArray>,
-    RuleLevel
+    RuleSeverity
   >;
 
 /**
@@ -54,7 +59,7 @@ type OverridesType<
  */
 export const extendFromConfigDefaults = <
   TRuleName extends string,
-  TConfigArray extends ConfigArray
+  TConfigArray extends RulesConfig[]
 >(
   config: TConfigArray,
   ruleName: TRuleName,
