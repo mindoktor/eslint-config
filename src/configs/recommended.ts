@@ -1,7 +1,6 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
-
 export const mindoktorRecommended = tseslint.config(
   {
     extends: [
@@ -29,7 +28,7 @@ export const mindoktorRecommended = tseslint.config(
         {
           // Copy/pasted strict defaults from https://typescript-eslint.io/rules/restrict-template-expressions#options
           // to allow options overrides keeping using strict defaults.
-          // Adding the overrides alone does not work as intended as it would otherwise pick the 
+          // Adding the overrides alone does not work as intended as it would otherwise pick the
           // defaults from the "recommended" set, not the "strict" one.
           // See more: https://github.com/typescript-eslint/typescript-eslint/issues/11462#issuecomment-3160814883
           ...{

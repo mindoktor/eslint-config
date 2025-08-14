@@ -14,5 +14,5 @@ export default tseslint.config(
   globalIgnores([
     'dist/', // ignore entire dist directory
     'node_modules/',
-  ])
+  ]),
 );
