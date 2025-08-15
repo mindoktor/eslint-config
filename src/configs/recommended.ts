@@ -1,6 +1,18 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
-import { extendFromConfigDefaults } from './utils/config.js';
+
+type Options = Record<string, string>;
+const tseslintRestrictTemplateExpressionRuleEntry =
+  tseslint.configs.strictTypeChecked.find(
+    (config) =>
+      config.rules?.['@typescript-eslint/restrict-template-expressions'] !=
+      null,
+  )?.rules?.['@typescript-eslint/restrict-template-expressions'];
+const tseslintRestrictTemplateExpressionDefaultOptions: Options = Array.isArray(
+  tseslintRestrictTemplateExpressionRuleEntry,
+)
+  ? (tseslintRestrictTemplateExpressionRuleEntry[1] as Options)
+  : {};
 
 export const mindoktorRecommended = tseslint.config(
   {
@@ -25,17 +37,14 @@ export const mindoktorRecommended = tseslint.config(
       ],
 
       // Allow template literals with numbers and booleans E.g. `${42}-${true}`
-      ...extendFromConfigDefaults(
-        tseslint.configs.strictTypeChecked,
-        '@typescript-eslint/restrict-template-expressions',
-        [
-          'error',
-          {
-            allowNumber: true,
-            allowBoolean: true,
-          },
-        ]
-      ),
+      '@typescript-eslint/restrict-template-expressions': [
+        'error',
+        {
+          ...tseslintRestrictTemplateExpressionDefaultOptions,
+          allowNumber: true,
+          allowBoolean: true,
+        },
+      ],
 
       // We want to enforce strict boolean expressions to avoid unintended type coercion
       // https://typescript-eslint.io/rules/strict-boolean-expressions
@@ -50,5 +59,5 @@ export const mindoktorRecommended = tseslint.config(
         projectService: true,
       },
     },
-  }
+  },
 );
