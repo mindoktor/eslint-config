@@ -5,27 +5,22 @@
     "**/*.jsx",
     "**/*.ts",
     "**/*.d.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "eslint.config.ts"
   ],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "dist"],
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@mindoktor/eslint-config/*": ["./*"]
-    },
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
+    "outDir": "./dist",
+    "declaration": true,
+    "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
     "noImplicitAny": true,
-    "lib": ["esnext"],
-    "module": "esnext",
+    "allowSyntheticDefaultImports": true,
     "target": "esnext",
-    "moduleResolution": "node",
-    "noEmit": true,
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "resolveJsonModule": true,
+    "skipLibCheck": true,
     "strict": true,
-    "skipLibCheck": true
   },
 }
