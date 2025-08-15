@@ -69,6 +69,19 @@ export const mindoktorRecommended = tseslint.config(
         },
       },
     },
+    rules: {
+      'import/enforce-node-protocol-usage': ['error', 'always'],
+      'import/export': 'error',
+      'import/first': 'error',
+      'import/newline-after-import': 'error',
+      'import/no-absolute-path': 'error',
+      'import/no-amd': 'error',
+      'import/no-cycle': 'warn',
+      'import/no-deprecated': 'warn',
+      'import/no-extraneous-dependencies': 'error',
+      'import/no-named-default': 'error',
+      'import/no-webpack-loader-syntax': 'error',
+    },
   },
 
   // Language Options
