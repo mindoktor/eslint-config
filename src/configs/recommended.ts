@@ -1,7 +1,9 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
+import importPlugin from 'eslint-plugin-import';
 
 export const mindoktorRecommended = tseslint.config(
+  // ESLint and Typescript ESLint
   {
     extends: [
       eslint.configs.recommended,
@@ -53,6 +55,23 @@ export const mindoktorRecommended = tseslint.config(
       curly: ['error', 'all'],
     },
   },
+
+  // Imports
+  {
+    extends: [
+      importPlugin.flatConfigs.recommended,
+      importPlugin.flatConfigs.typescript,
+    ],
+    settings: {
+      'import/resolver': {
+        typescript: {
+          project: './tsconfig.json',
+        },
+      },
+    },
+  },
+
+  // Language Options
   {
     languageOptions: {
       parserOptions: {
