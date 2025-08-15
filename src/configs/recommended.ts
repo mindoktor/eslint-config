@@ -1,18 +1,6 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
-// Copy/pasted these from https://typescript-eslint.io/rules/restrict-template-expressions#options
-// to allow options overrides with strict defaults.
-// Why adding the overrides only was not enough? 
-// See: https://github.com/typescript-eslint/typescript-eslint/issues/11462#issuecomment-3160814883
-const tseslintRestrictTemplateExpressionDefaultOptions = {
-  allowAny: false,
-  allowBoolean: false,
-  allowNever: false,
-  allowNullish: false,
-  allowNumber: false,
-  allowRegExp: false,
-} as const;
 
 export const mindoktorRecommended = tseslint.config(
   {
@@ -36,11 +24,23 @@ export const mindoktorRecommended = tseslint.config(
         },
       ],
 
-      // Allow template literals with numbers and booleans E.g. `${42}-${true}`
       '@typescript-eslint/restrict-template-expressions': [
         'error',
         {
-          ...tseslintRestrictTemplateExpressionDefaultOptions,
+          // Copy/pasted strict defaults from https://typescript-eslint.io/rules/restrict-template-expressions#options
+          // to allow options overrides keeping using strict defaults.
+          // Why adding just the overrides was not enough?
+          // See: https://github.com/typescript-eslint/typescript-eslint/issues/11462#issuecomment-3160814883
+          ...{
+            allowAny: false,
+            allowBoolean: false,
+            allowNever: false,
+            allowNullish: false,
+            allowNumber: false,
+            allowRegExp: false,
+          },
+          // Actual overrides
+          // Allow template literals with numbers and booleans E.g. `${42}-${true}`
           allowNumber: true,
           allowBoolean: true,
         },
