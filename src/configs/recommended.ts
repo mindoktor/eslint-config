@@ -1,7 +1,9 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
+import importPlugin from 'eslint-plugin-import';
 
 export const mindoktorRecommended = tseslint.config(
+  // ESLint and Typescript ESLint
   {
     extends: [
       eslint.configs.recommended,
@@ -53,6 +55,36 @@ export const mindoktorRecommended = tseslint.config(
       curly: ['error', 'all'],
     },
   },
+
+  // Imports
+  {
+    extends: [
+      importPlugin.flatConfigs.recommended,
+      importPlugin.flatConfigs.typescript,
+    ],
+    settings: {
+      'import/resolver': {
+        typescript: {
+          project: './tsconfig.json',
+        },
+      },
+    },
+    rules: {
+      'import/enforce-node-protocol-usage': ['error', 'always'],
+      'import/export': 'error',
+      'import/first': 'error',
+      'import/newline-after-import': 'error',
+      'import/no-absolute-path': 'error',
+      'import/no-amd': 'error',
+      'import/no-cycle': 'warn',
+      'import/no-deprecated': 'warn',
+      'import/no-extraneous-dependencies': 'error',
+      'import/no-named-default': 'error',
+      'import/no-webpack-loader-syntax': 'error',
+    },
+  },
+
+  // Language Options
   {
     languageOptions: {
       parserOptions: {
