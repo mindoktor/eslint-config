@@ -1,18 +1,18 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
-type Options = Record<string, string>;
-const tseslintRestrictTemplateExpressionRuleEntry =
-  tseslint.configs.strictTypeChecked.find(
-    (config) =>
-      config.rules?.['@typescript-eslint/restrict-template-expressions'] !=
-      null,
-  )?.rules?.['@typescript-eslint/restrict-template-expressions'];
-const tseslintRestrictTemplateExpressionDefaultOptions: Options = Array.isArray(
-  tseslintRestrictTemplateExpressionRuleEntry,
-)
-  ? (tseslintRestrictTemplateExpressionRuleEntry[1] as Options)
-  : {};
+// Copy/pasted these from https://typescript-eslint.io/rules/restrict-template-expressions#options
+// to allow options overrides with strict defaults.
+// Why adding the overrides only was not enough? 
+// See: https://github.com/typescript-eslint/typescript-eslint/issues/11462#issuecomment-3160814883
+const tseslintRestrictTemplateExpressionDefaultOptions = {
+  allowAny: false,
+  allowBoolean: false,
+  allowNever: false,
+  allowNullish: false,
+  allowNumber: false,
+  allowRegExp: false,
+} as const;
 
 export const mindoktorRecommended = tseslint.config(
   {
