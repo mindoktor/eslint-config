@@ -21,6 +21,7 @@ eslint-plugin-prettier \
 eslint-plugin-simple-import-sort \
 eslint-plugin-unused-imports \
 prettier \
+typescript \
 typescript-eslint
 ```
 
