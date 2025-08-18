@@ -2,6 +2,7 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import importPlugin from 'eslint-plugin-import';
+import simpleImportSort from "eslint-plugin-simple-import-sort";
 
 export const mindoktorRecommended = tseslint.config(
   // ESLint and Typescript ESLint
@@ -83,6 +84,15 @@ export const mindoktorRecommended = tseslint.config(
       'import/no-named-default': 'error',
       'import/no-self-import': 'error',
       'import/no-webpack-loader-syntax': 'error',
+    },
+  },
+  {
+    plugins: {
+      "simple-import-sort": simpleImportSort,
+    },
+    rules: {
+      "simple-import-sort/imports": "error",
+      "simple-import-sort/exports": "error",
     },
   },
 
