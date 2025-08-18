@@ -1,8 +1,8 @@
 /* eslint-disable import/no-named-as-default-member */
 import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
 import importPlugin from 'eslint-plugin-import';
-import simpleImportSort from "eslint-plugin-simple-import-sort";
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import tseslint from 'typescript-eslint';
 
 export const mindoktorRecommended = tseslint.config(
   // ESLint and Typescript ESLint
@@ -88,11 +88,11 @@ export const mindoktorRecommended = tseslint.config(
   },
   {
     plugins: {
-      "simple-import-sort": simpleImportSort,
+      'simple-import-sort': simpleImportSort,
     },
     rules: {
-      "simple-import-sort/imports": "error",
-      "simple-import-sort/exports": "error",
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
     },
   },
 
