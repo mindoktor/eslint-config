@@ -8,6 +8,8 @@ export default tseslint.config(
     extends: [minDoktorEsLintConfig],
     // Language Options
     languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
       parserOptions: {
         projectService: true,
       },
