@@ -9,6 +9,8 @@ export const mindoktorReactRecommended = tseslint.config({
     mindoktorRecommended,
     reactPlugin.configs.flat.recommended,
     reactPlugin.configs.flat['jsx-runtime'],
+    // Switch to recommended when upgrading to version 6
+    // See: https://github.com/facebook/react/tree/main/packages/eslint-plugin-react-hooks#flat-config-eslintconfigjsts
     reactHooksPlugin.configs['recommended-latest'],
   ],
   rules: {
