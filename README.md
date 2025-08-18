@@ -11,6 +11,7 @@ Recommended settings for Mindoktor projects.
 ```sh
 yarn add -D @mindoktor/eslint-config \
 eslint \
+@eslint/js \
 eslint-config-prettier \
 eslint-import-resolver-typescript \
 eslint-plugin-import \
@@ -62,19 +63,10 @@ export default defaultConfig;
 
 Includes recommended settings for React projects as well as the other recommended settings.
 
+In addition to the above command, you should also install the following dependencies:
+
 ```sh
-yarn add -D @mindoktor/eslint-config \
-eslint \
-eslint-config-prettier \
-eslint-import-resolver-typescript \
-eslint-plugin-import \
-eslint-plugin-prettier \
-eslint-plugin-react \
-eslint-plugin-react-hooks \
-eslint-plugin-simple-import-sort \
-eslint-plugin-unused-imports \
-prettier \
-typescript-eslint
+yarn add -D eslint-plugin-react eslint-plugin-react-hooks
 ```
 
 `eslint.config.mjs`
