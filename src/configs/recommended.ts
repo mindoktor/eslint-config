@@ -88,9 +88,13 @@ export const mindoktorRecommended = tseslint.config(
     rules: {
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
+
+      // Needs to be disabled for this to work correctly
+      // See: https://github.com/sweepline/eslint-plugin-unused-imports?tab=readme-ov-file#usage
+      '@typescript-eslint/no-unused-vars': 'off',
       'unused-imports/no-unused-imports': 'error',
       'unused-imports/no-unused-vars': [
-        'off',
+        'error',
         {
           vars: 'all',
           varsIgnorePattern: '^_',
