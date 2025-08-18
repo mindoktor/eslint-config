@@ -6,6 +6,21 @@ import minDoktorEsLintConfig from './src/index.js';
 export default tseslint.config(
   {
     extends: [minDoktorEsLintConfig],
+    // Language Options
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+      },
+    },
+    settings: {
+      'import/resolver': {
+        typescript: {
+          project: './tsconfig.json',
+        },
+      },
+    },
+  },
+  {
     rules: {
       // Custom rules can be added here
       // ...

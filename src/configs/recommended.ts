@@ -64,13 +64,7 @@ export const mindoktorRecommended = tseslint.config(
       importPlugin.flatConfigs.recommended,
       importPlugin.flatConfigs.typescript,
     ],
-    settings: {
-      'import/resolver': {
-        typescript: {
-          project: './tsconfig.json',
-        },
-      },
-    },
+
     rules: {
       'import/enforce-node-protocol-usage': ['error', 'always'],
       'import/export': 'error',
@@ -93,15 +87,6 @@ export const mindoktorRecommended = tseslint.config(
     rules: {
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
-    },
-  },
-
-  // Language Options
-  {
-    languageOptions: {
-      parserOptions: {
-        projectService: true,
-      },
     },
   },
 );
