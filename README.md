@@ -10,8 +10,10 @@ Recommended settings for Mindoktor projects.
 
 ```sh
 yarn add -D @mindoktor/eslint-config \
-eslint \
 @eslint/js \
+@typescript-eslint/eslint-plugin \
+@typescript-eslint/parser \
+eslint \
 eslint-config-prettier \
 eslint-import-resolver-typescript \
 eslint-plugin-import \
