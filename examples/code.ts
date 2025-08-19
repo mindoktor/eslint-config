@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable unused-imports/no-unused-vars */
 // Example code snippet demonstrating ESLint configuration
 
 const c = 5;

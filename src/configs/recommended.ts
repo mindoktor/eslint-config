@@ -1,7 +1,12 @@
+/* eslint-disable import/no-named-as-default-member */
 import eslint from '@eslint/js';
+import importPlugin from 'eslint-plugin-import';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import unusedImports from 'eslint-plugin-unused-imports';
 import tseslint from 'typescript-eslint';
 
 export const mindoktorRecommended = tseslint.config(
+  // ESLint and Typescript ESLint
   {
     extends: [
       eslint.configs.recommended,
@@ -53,11 +58,50 @@ export const mindoktorRecommended = tseslint.config(
       curly: ['error', 'all'],
     },
   },
+
+  // Imports
   {
-    languageOptions: {
-      parserOptions: {
-        projectService: true,
-      },
+    extends: [
+      importPlugin.flatConfigs.recommended,
+      importPlugin.flatConfigs.typescript,
+    ],
+    rules: {
+      'import/enforce-node-protocol-usage': ['error', 'always'],
+      'import/export': 'error',
+      'import/first': 'error',
+      'import/newline-after-import': 'error',
+      'import/no-absolute-path': 'error',
+      'import/no-amd': 'error',
+      'import/no-cycle': 'warn',
+      'import/no-deprecated': 'warn',
+      'import/no-extraneous-dependencies': 'error',
+      'import/no-named-default': 'error',
+      'import/no-self-import': 'error',
+      'import/no-webpack-loader-syntax': 'error',
+    },
+  },
+  {
+    plugins: {
+      'simple-import-sort': simpleImportSort,
+      'unused-imports': unusedImports,
+    },
+    rules: {
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
+
+      // Needs to be disabled for this to work correctly
+      // See: https://github.com/sweepline/eslint-plugin-unused-imports?tab=readme-ov-file#usage
+      '@typescript-eslint/no-unused-vars': 'off',
+      'unused-imports/no-unused-imports': 'error',
+      'unused-imports/no-unused-vars': [
+        'error',
+        {
+          vars: 'all',
+          varsIgnorePattern: '^_',
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+        },
+      ],
     },
   },
 );
