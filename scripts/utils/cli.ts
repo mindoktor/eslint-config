@@ -1,0 +1,26 @@
+import { execSync } from 'node:child_process';
+import readline from 'node:readline/promises';
+
+export const input = async (question: string) => {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  const answer = await rl.question(question);
+  rl.close();
+  return answer;
+};
+
+export const runCommand = (command: string) => {
+  console.log(`$ ${command}`);
+  return execSync(command, { stdio: 'inherit' }).toString().trim();
+};
+
+const red = (text: string) => {
+  return `\x1b[31m${text}\x1b[0m`;
+};
+
+export const logErrorAndExit = (error: unknown) => {
+  console.error(red(String(error)));
+  process.exit(1);
+};
