@@ -13,9 +13,16 @@ export const getPackageJson = () => {
     throw new Error(`Could not find package.json at ${PACKAGE_JSON_PATH}`);
   }
 
-  const packageJson = JSON.parse(
-    fs.readFileSync(PACKAGE_JSON_PATH, 'utf-8'),
-  ) as PackageJson;
+  let packageJson: PackageJson;
+  try {
+    packageJson = JSON.parse(
+      fs.readFileSync(PACKAGE_JSON_PATH, 'utf-8'),
+    ) as PackageJson;
+  } catch (err) {
+    throw new Error(
+      `Malformed package.json at ${PACKAGE_JSON_PATH}: ${(err as Error).message}`,
+    );
+  }
 
   if (!packageJson.version) {
     throw new Error(`Invalid package.json at ${PACKAGE_JSON_PATH}`);
