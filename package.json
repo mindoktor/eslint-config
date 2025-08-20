@@ -22,7 +22,8 @@
     "typecheck": "tsc --noEmit",
     "cleanbuild": "yarn clean && yarn build",
     "prepare": "yarn build",
-    "postinstall": "yarn build"
+    "postinstall": "yarn build",
+    "release": "node scripts/release.ts"
   },
   "peerDependencies": {
     "@eslint/js": ">=9",
