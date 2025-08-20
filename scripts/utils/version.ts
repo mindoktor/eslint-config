@@ -13,7 +13,15 @@ export interface Version {
 }
 
 export const createVersion = (semver: string): Version => {
-  const [major, minor, patch] = semver.split('.').map(Number);
+  // Validate semver: must be "x.y.z" where x, y, z are non-negative integers
+  const semverRegex = /^(\d+)\.(\d+)\.(\d+)$/;
+  const match = semverRegex.exec(semver);
+  if (!match) {
+    throw new Error(`Invalid semver string: "${semver}"`);
+  }
+  const major = Number(match[1]);
+  const minor = Number(match[2]);
+  const patch = Number(match[3]);
   return { major, minor, patch };
 };
 
