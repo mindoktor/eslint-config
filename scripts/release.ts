@@ -41,6 +41,9 @@ const main = async () => {
     console.log(
       `This will perform a ${bumpType} release of the given version and then update develop and main`,
     );
+    if (dryRun) {
+      console.log(`Dry run enabled. Not making any changes.`);
+    }
     const confirmation = await input('Type "y/yes" to continue: ');
     if (!['y', 'yes'].includes(confirmation.toLowerCase())) {
       console.log('Aborting release process.');
@@ -53,8 +56,10 @@ const main = async () => {
     console.log(`Current version: ${packageJson.version}`);
 
     console.log(`Asserting git stage is clean...`);
-    const output = runCommand('git status --porcelain', { dryRun });
-    if (output !== '') {
+    const output = runCommand('git status --porcelain', {
+      captureOutput: true,
+    });
+    if (output != null && output !== '') {
       throw new Error(
         `Unstaged changes found:\n${output}\nYou need to commit or stash them before releasing.`,
       );
