@@ -11,8 +11,11 @@ export const input = async (question: string) => {
   return answer;
 };
 
-export const runCommand = (command: string) => {
+export const runCommand = (command: string, options?: { dryRun?: boolean }) => {
   console.log(`$ ${command}`);
+  if (options?.dryRun === true) {
+    return '';
+  }
   return execSync(command, { stdio: 'inherit' }).toString().trim();
 };
 

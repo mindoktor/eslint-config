@@ -8,7 +8,12 @@ import {
   versionToString,
 } from './utils/version.ts';
 
-const parseBumpTypeArg = (): VersionBump => {
+interface Args {
+  bumpType: VersionBump;
+  dryRun: boolean;
+}
+
+const parseArgs = (): Args => {
   if (process.argv.length < 3) {
     throw new Error(
       `No bump type specified. Please use one of: ${Object.keys(versionBump).join(', ')}`,
@@ -21,12 +26,18 @@ const parseBumpTypeArg = (): VersionBump => {
       `Invalid bump type. Please use one of: ${Object.keys(versionBump).join(', ')}`,
     );
   }
-  return bumpType as VersionBump;
+
+  const dryRun = process.argv.includes('--dry-run');
+
+  return {
+    bumpType: bumpType as VersionBump,
+    dryRun,
+  };
 };
 
 const main = async () => {
   try {
-    const bumpType = parseBumpTypeArg();
+    const { bumpType, dryRun } = parseArgs();
     console.log(
       `This will perform a ${bumpType} release of the given version and then update develop and main`,
     );
@@ -42,7 +53,7 @@ const main = async () => {
     console.log(`Current version: ${packageJson.version}`);
 
     console.log(`Asserting git stage is clean...`);
-    const output = runCommand('git status --porcelain');
+    const output = runCommand('git status --porcelain', { dryRun });
     if (output !== '') {
       throw new Error(
         `Unstaged changes found:\n${output}\nYou need to commit or stash them before releasing.`,
@@ -50,37 +61,45 @@ const main = async () => {
     }
 
     console.log(`Ensure all branches are up to date...`);
-    runCommand('git fetch');
-    runCommand('git checkout main');
-    runCommand('git pull');
-    runCommand('git checkout develop');
-    runCommand('git pull');
+    runCommand('git fetch', { dryRun });
+    runCommand('git checkout main', { dryRun });
+    runCommand('git pull', { dryRun });
+    runCommand('git checkout develop', { dryRun });
+    runCommand('git pull', { dryRun });
 
     console.log(`Bumping version...`);
     const newVersion = bumpVersion(currentVersion, bumpType);
     const newVersionString = versionToString(newVersion);
     console.log(`New version: ${newVersionString}`);
-    savePackageJson({
-      ...packageJson,
-      version: newVersionString,
+    if (dryRun) {
+      console.log(`Dry run enabled. Not saving package.json.`);
+    } else {
+      savePackageJson({
+        ...packageJson,
+        version: newVersionString,
+      });
+    }
+    runCommand('git add package.json', { dryRun });
+    runCommand(`git checkout -b ${newVersionString}`, { dryRun });
+    runCommand(`git commit -m "chore: bump version - ${newVersionString}"`, {
+      dryRun,
     });
-    runCommand('git add package.json');
-    runCommand(`git checkout -b ${newVersionString}`);
-    runCommand(`git commit -m "chore: bump version - ${newVersionString}"`);
-    runCommand(`git push --set-upstream origin ${newVersionString}`);
+    runCommand(`git push --set-upstream origin ${newVersionString}`, {
+      dryRun,
+    });
 
     console.log(`Merging version on develop...`);
-    runCommand('git checkout develop');
-    runCommand(`git merge ${newVersionString}`);
-    runCommand('git push');
+    runCommand('git checkout develop', { dryRun });
+    runCommand(`git merge ${newVersionString}`, { dryRun });
+    runCommand('git push', { dryRun });
 
     console.log(`Merging develop on main...`);
-    runCommand('git checkout main');
-    runCommand(`git merge develop`);
-    runCommand('git push');
+    runCommand('git checkout main', { dryRun });
+    runCommand(`git merge develop`, { dryRun });
+    runCommand('git push', { dryRun });
 
     console.log(`Release process completed successfully.`);
-    runCommand('git checkout develop');
+    runCommand('git checkout develop', { dryRun });
   } catch (error) {
     logErrorAndExit(error);
   }
