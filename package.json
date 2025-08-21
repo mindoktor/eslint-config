@@ -1,6 +1,6 @@
 {
   "name": "@mindoktor/eslint-config",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "description": "Shared ESLint config for MinDoktor projects",
   "repository": "git@github.com:mindoktor/eslint-config.git",
@@ -21,8 +21,7 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "cleanbuild": "yarn clean && yarn build",
-    "prepare": "yarn build",
-    "postinstall": "yarn build"
+    "release": "release-it"
   },
   "peerDependencies": {
     "@eslint/js": ">=9",
@@ -63,6 +62,7 @@
     "eslint-plugin-unused-imports": "^4.2.0",
     "jiti": "^2.5.1",
     "prettier": "^3.6.2",
+    "release-it": "^19.0.4",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.39.0"
   }
