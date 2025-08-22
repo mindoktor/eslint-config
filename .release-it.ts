@@ -5,6 +5,7 @@ const releaseItConfig: Config = {
     commitMessage: 'chore: bump version to ${version}',
     tagName: '${version}',
     requireCleanWorkingDir: true,
+    requireBranch: 'develop',
     push: false,
   },
   npm: {
@@ -12,7 +13,7 @@ const releaseItConfig: Config = {
   },
   hooks: {
     'before:init': ['yarn lint', 'yarn typecheck'],
-    'before:bump': ['yarn cleanbuild', 'yarn add .'],
+    'before:bump': ['yarn cleanbuild', 'git add dist -f'],
     'before:release': [
       'git checkout -b ${version}',
       'git push --set-upstream origin ${version}',
