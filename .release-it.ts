@@ -22,6 +22,7 @@ const releaseItConfig: Config = {
       'git add dist -f',
       'git commit -m "chore: release ${version}"',
       'git push --set-upstream origin ${version}',
+      'git switch develop',
     ],
   },
 };
