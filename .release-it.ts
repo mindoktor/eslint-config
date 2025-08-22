@@ -13,7 +13,7 @@ const releaseItConfig: Config = {
     publish: false,
   },
   hooks: {
-    'before:init': ['yarn lint', 'yarn typecheck'],
+    'before:init': ['git pull', 'yarn lint', 'yarn typecheck'],
     // Update develop with the new version
     'after:bump': [
       'git add .',
