@@ -21,7 +21,7 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "cleanbuild": "yarn clean && yarn build",
-    "release": "release-it"
+    "release": "release-it --only-version"
   },
   "peerDependencies": {
     "@eslint/js": ">=9",
