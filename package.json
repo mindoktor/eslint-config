@@ -1,6 +1,6 @@
 {
   "name": "@mindoktor/eslint-config",
-  "version": "0.0.2",
+  "version": "1.0.0-beta.1",
   "type": "module",
   "description": "Shared ESLint config for MinDoktor projects",
   "repository": "git@github.com:mindoktor/eslint-config.git",
