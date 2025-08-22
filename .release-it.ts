@@ -2,21 +2,23 @@ import type { Config } from 'release-it';
 
 const releaseItConfig: Config = {
   git: {
+    commit: true,
     commitMessage: 'chore: bump version to ${version}',
     tagName: '${version}',
     requireCleanWorkingDir: true,
     requireBranch: 'develop',
-    push: false,
+    push: true,
+    pushArgs: '--set-upstream origin ${version}',
   },
   npm: {
     publish: false,
   },
   hooks: {
     'before:init': ['yarn lint', 'yarn typecheck'],
-    'before:bump': ['yarn cleanbuild', 'git add dist -f'],
     'before:release': [
-      'git checkout -b ${version}',
-      'git push --set-upstream origin ${version}',
+      'git switch -C ${version}',
+      'yarn cleanbuild',
+      'git add dist -f',
     ],
     'after:release': [
       'git checkout develop',
