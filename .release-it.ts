@@ -3,7 +3,7 @@ import type { Config } from 'release-it';
 const releaseItConfig: Config = {
   git: {
     commit: true,
-    commitMessage: 'chore: bump version to ${version}',
+    commitMessage: 'chore: release ${version}',
     tag: false,
     requireCleanWorkingDir: true,
     requireBranch: 'develop',
@@ -14,16 +14,20 @@ const releaseItConfig: Config = {
   },
   hooks: {
     'before:init': ['yarn lint', 'yarn typecheck'],
-    // the "release" step only does the bump-commit on 'develop' and pushes to origin
-    'after:release': [
-      // the actual "release" happens here, by creating a new branch and pushing it with the built artifacts
+    // Update develop with the new version
+    'after:bump': [
+      'git add .',
+      'git commit -m "chore: bump version to ${version}"',
+      'git push',
+    ],
+    // Create a new branch for the release
+    'before:release': [
       'git switch -C ${version}',
       'yarn cleanbuild',
       'git add dist -f',
-      'git commit -m "chore: release ${version}"',
-      'git push --set-upstream origin ${version}',
-      'git switch develop',
     ],
+    // The release is done, we return to develop
+    'after:release': ['git switch develop'],
   },
 };
 
