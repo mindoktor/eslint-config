@@ -1,6 +1,7 @@
 import type { Config } from 'release-it';
 
 const releaseItConfig: Config = {
+  // This git config is responsible for the push, that is the actual release
   git: {
     commit: true,
     commitMessage: 'chore: release ${version}',
@@ -12,6 +13,7 @@ const releaseItConfig: Config = {
   npm: {
     publish: false,
   },
+  // The following hook steps are in order of execution
   hooks: {
     'before:init': ['git pull', 'yarn lint', 'yarn typecheck'],
     // Update develop with the new version
