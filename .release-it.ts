@@ -8,7 +8,6 @@ const releaseItConfig: Config = {
     requireCleanWorkingDir: true,
     requireBranch: 'develop',
     push: true,
-    pushArgs: ['--set-upstream origin ${version}'],
   },
   npm: {
     publish: false,
@@ -24,6 +23,7 @@ const releaseItConfig: Config = {
     // Create a new branch for the release
     'before:release': [
       'git switch -C ${version}',
+      'git branch --set-upstream-to=origin/${version}',
       'yarn cleanbuild',
       'git add dist -f',
     ],
