@@ -23,7 +23,7 @@ const releaseItConfig: Config = {
     // Create a new branch for the release
     'before:release': [
       'git switch -C ${version}',
-      'git branch --set-upstream-to=origin/${version}',
+      'git push --set-upstream origin ${version}',
       'yarn cleanbuild',
       'git add dist -f',
     ],
