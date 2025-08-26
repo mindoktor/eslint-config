@@ -8,6 +8,7 @@ const releaseItConfig: Config = {
     requireCleanWorkingDir: true,
     requireBranch: 'develop',
     push: true,
+    pushArgs: ['--set-upstream origin ${version}'],
   },
   npm: {
     publish: false,
