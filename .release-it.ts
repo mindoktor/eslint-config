@@ -15,7 +15,7 @@ const releaseItConfig: Config = {
   },
   // The following hook steps are in order of execution
   hooks: {
-    'before:init': ['git pull', 'yarn lint', 'yarn typecheck'],
+    'before:init': ['git pull', 'yarn', 'yarn lint', 'yarn typecheck'],
     // Update develop with the new version
     'after:bump': [
       'git add .',
