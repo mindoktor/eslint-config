@@ -80,10 +80,10 @@ export const mindoktorRecommended = tseslint.config(
       // See more:
       // - Performance issues: https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
       // - Parse errors: https://github.com/typescript-eslint/typescript-eslint/issues/1333
-      'import/no-deprecated': 'off',
+      'import/default': 'off',
       'import/named': 'off',
       'import/namespace': 'off',
-      'import/default': 'off',
+      'import/no-deprecated': 'off',
       'import/no-named-as-default-member': 'off',
       'import/no-unresolved': 'off',
     },
