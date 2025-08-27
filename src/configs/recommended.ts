@@ -72,7 +72,6 @@ export const mindoktorRecommended = tseslint.config(
       'import/no-absolute-path': 'error',
       'import/no-amd': 'error',
       'import/no-cycle': 'warn',
-      'import/no-deprecated': 'warn',
       'import/no-extraneous-dependencies': 'error',
       'import/no-named-default': 'error',
       'import/no-self-import': 'error',
@@ -81,6 +80,7 @@ export const mindoktorRecommended = tseslint.config(
       // See more:
       // - Performance issues: https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
       // - Parse errors: https://github.com/typescript-eslint/typescript-eslint/issues/1333
+      'import/no-deprecated': 'off',
       'import/named': 'off',
       'import/namespace': 'off',
       'import/default': 'off',
