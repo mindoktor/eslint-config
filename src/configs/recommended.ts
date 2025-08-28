@@ -1,4 +1,3 @@
-/* eslint-disable import/no-named-as-default-member */
 import eslint from '@eslint/js';
 import importPlugin from 'eslint-plugin-import';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
@@ -73,11 +72,20 @@ export const mindoktorRecommended = tseslint.config(
       'import/no-absolute-path': 'error',
       'import/no-amd': 'error',
       'import/no-cycle': 'warn',
-      'import/no-deprecated': 'warn',
       'import/no-extraneous-dependencies': 'error',
       'import/no-named-default': 'error',
       'import/no-self-import': 'error',
       'import/no-webpack-loader-syntax': 'error',
+      // Disable redundant rules
+      // See more:
+      // - Performance issues: https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
+      // - Parse errors: https://github.com/typescript-eslint/typescript-eslint/issues/1333
+      'import/default': 'off',
+      'import/named': 'off',
+      'import/namespace': 'off',
+      'import/no-deprecated': 'off',
+      'import/no-named-as-default-member': 'off',
+      'import/no-unresolved': 'off',
     },
   },
   {
