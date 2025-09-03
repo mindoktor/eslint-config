@@ -9,7 +9,7 @@ Shared ESLint config for MinDoktor projects
 Recommended settings for Mindoktor projects.
 
 ```sh
-yarn add -D @mindoktor/eslint-config \
+yarn add -D @mindoktor/eslint-config@mindoktor/eslint-config \
 @eslint/js \
 @typescript-eslint/eslint-plugin \
 @typescript-eslint/parser \
@@ -115,7 +115,7 @@ export default defaultConfig;
 To install a specific branch of the ESLint config, you can use the following command:
 
 ```sh
-yarn add -D @mindoktor/eslint-config#<branch-name>
+yarn add -D @mindoktor/eslint-config@mindoktor/eslint-config#<branch-name>
 ```
 
 Replace `<branch-name>` with the name of the branch you want to install.
