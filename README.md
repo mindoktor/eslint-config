@@ -9,7 +9,7 @@ Shared ESLint config for MinDoktor projects
 Recommended settings for Mindoktor projects.
 
 ```sh
-yarn add -D @mindoktor/eslint-config \
+yarn add -D @mindoktor/eslint-config@mindoktor/eslint-config \
 @eslint/js \
 @typescript-eslint/eslint-plugin \
 @typescript-eslint/parser \
@@ -31,10 +31,9 @@ typescript-eslint
 // @ts-check
 
 import { configs } from '@mindoktor/eslint-config';
-import { globalIgnores } from 'eslint/config';
-import tseslint from 'typescript-eslint';
+import { globalIgnores, defineConfig } from 'eslint/config';
 
-const defaultConfig = tseslint.config(
+const defaultConfig = defineConfig(
   {
     extends: [configs.recommended, configs.stylistic],
     languageOptions: {
@@ -78,10 +77,9 @@ yarn add -D eslint-plugin-react eslint-plugin-react-hooks
 // @ts-check
 
 import { configs } from '@mindoktor/eslint-config';
-import { globalIgnores } from 'eslint/config';
-import tseslint from 'typescript-eslint';
+import { globalIgnores, defineConfig } from 'eslint/config';
 
-const defaultConfig = tseslint.config(
+const defaultConfig = defineConfig(
   {
     extends: [configs.reactRecommended, configs.stylistic],
     languageOptions: {
@@ -117,7 +115,7 @@ export default defaultConfig;
 To install a specific branch of the ESLint config, you can use the following command:
 
 ```sh
-yarn add -D @mindoktor/eslint-config#<branch-name>
+yarn add -D @mindoktor/eslint-config@mindoktor/eslint-config#<branch-name>
 ```
 
 Replace `<branch-name>` with the name of the branch you want to install.

@@ -1,9 +1,8 @@
-import { globalIgnores } from 'eslint/config';
-import tseslint from 'typescript-eslint';
+import { defineConfig, globalIgnores } from 'eslint/config';
 
 import minDoktorEsLintConfig from './src/index.js';
 
-export default tseslint.config(
+export default defineConfig(
   {
     extends: [minDoktorEsLintConfig],
     // Language Options

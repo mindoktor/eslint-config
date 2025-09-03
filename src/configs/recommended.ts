@@ -1,10 +1,11 @@
 import eslint from '@eslint/js';
+import { defineConfig } from 'eslint/config';
 import importPlugin from 'eslint-plugin-import';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import unusedImports from 'eslint-plugin-unused-imports';
 import tseslint from 'typescript-eslint';
 
-export const mindoktorRecommended = tseslint.config(
+export const mindoktorRecommended = defineConfig(
   // ESLint and Typescript ESLint
   {
     extends: [
