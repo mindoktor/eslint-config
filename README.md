@@ -31,10 +31,9 @@ typescript-eslint
 // @ts-check
 
 import { configs } from '@mindoktor/eslint-config';
-import { globalIgnores } from 'eslint/config';
-import tseslint from 'typescript-eslint';
+import { globalIgnores, defineConfig } from 'eslint/config';
 
-const defaultConfig = tseslint.config(
+const defaultConfig = defineConfig(
   {
     extends: [configs.recommended, configs.stylistic],
     languageOptions: {
@@ -78,10 +77,9 @@ yarn add -D eslint-plugin-react eslint-plugin-react-hooks
 // @ts-check
 
 import { configs } from '@mindoktor/eslint-config';
-import { globalIgnores } from 'eslint/config';
-import tseslint from 'typescript-eslint';
+import { globalIgnores, defineConfig } from 'eslint/config';
 
-const defaultConfig = tseslint.config(
+const defaultConfig = defineConfig(
   {
     extends: [configs.reactRecommended, configs.stylistic],
     languageOptions: {

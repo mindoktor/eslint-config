@@ -1,10 +1,10 @@
+import { defineConfig } from 'eslint/config';
 import reactPlugin from 'eslint-plugin-react';
 import * as reactHooksPlugin from 'eslint-plugin-react-hooks';
-import tseslint from 'typescript-eslint';
 
 import { mindoktorRecommended } from './recommended.js';
 
-export const mindoktorReactRecommended = tseslint.config({
+export const mindoktorReactRecommended = defineConfig({
   extends: [
     mindoktorRecommended,
     reactPlugin.configs.flat.recommended,

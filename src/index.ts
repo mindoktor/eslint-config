@@ -1,4 +1,4 @@
-import tseslint from 'typescript-eslint';
+import { defineConfig } from 'eslint/config';
 
 import { mindoktorReactRecommended } from './configs/reactRecommended.js';
 import { mindoktorRecommended } from './configs/recommended.js';
@@ -10,7 +10,7 @@ export const configs = {
   stylistic: mindoktorStylistic,
 };
 
-const defaultConfig = tseslint.config({
+const defaultConfig = defineConfig({
   extends: [mindoktorRecommended, mindoktorStylistic],
 });
 
