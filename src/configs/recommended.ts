@@ -89,6 +89,15 @@ export const mindoktorRecommended = defineConfig(
       'import/no-unresolved': 'off',
     },
   },
+  // Type import workaround for no-duplicate-imports issues
+  // See more: https://github.com/import-js/eslint-plugin-import/issues/3185#issuecomment-3275581648
+  {
+    rules: {
+      'import/no-duplicates': ['off'],
+      'no-duplicate-imports': ['error', { allowSeparateTypeImports: true }],
+    },
+  },
+  // Import sorting and unused imports
   {
     plugins: {
       'simple-import-sort': simpleImportSort,
