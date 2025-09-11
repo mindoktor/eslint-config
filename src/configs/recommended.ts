@@ -55,7 +55,19 @@ export const mindoktorRecommended = defineConfig(
       // https://typescript-eslint.io/rules/strict-boolean-expressions
       '@typescript-eslint/strict-boolean-expressions': 'error',
 
+      // Enforce consistent brace style for all control statements
       curly: ['error', 'all'],
+
+      // Enforce simple and consistent object literal syntax
+      'dot-notation': 'error',
+      'no-useless-rename': 'error',
+      'object-shorthand': ['error', 'always'],
+
+      // Prefer ...rest over the old `arguments` variable
+      'prefer-rest-params': 'error',
+
+      // Use template literals instead of string concatenation
+      'prefer-template': 'error',
     },
   },
 

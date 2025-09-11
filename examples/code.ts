@@ -6,7 +6,7 @@ const c = 5;
 const obj = {
   a: 1,
   b: 2,
-  c: c,
+  c,
 };
 
 const myFunction = (x: number) => {
