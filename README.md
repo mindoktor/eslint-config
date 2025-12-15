@@ -35,7 +35,7 @@ import { globalIgnores, defineConfig } from 'eslint/config';
 
 const defaultConfig = defineConfig(
   {
-    extends: [configs.recommended, configs.stylistic],
+    extends: [configs.stylistic, configs.recommended],
     languageOptions: {
       parserOptions: {
         projectService: true,
@@ -81,7 +81,7 @@ import { globalIgnores, defineConfig } from 'eslint/config';
 
 const defaultConfig = defineConfig(
   {
-    extends: [configs.reactRecommended, configs.stylistic],
+    extends: [configs.stylistic, configs.reactRecommended],
     languageOptions: {
       parserOptions: {
         projectService: true,

@@ -11,7 +11,7 @@ export const configs = {
 };
 
 const defaultConfig = defineConfig({
-  extends: [mindoktorRecommended, mindoktorStylistic],
+  extends: [mindoktorStylistic, mindoktorRecommended],
 });
 
 export default defaultConfig;
