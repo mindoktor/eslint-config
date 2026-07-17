@@ -137,3 +137,8 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Agent scratch areas (not part of the shared agent context)
+.agents/playground/
+.agents/tasks/
+.claude/settings.local.json
