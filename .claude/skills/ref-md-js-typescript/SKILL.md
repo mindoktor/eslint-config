@@ -11,14 +11,14 @@ description: >-
   scripts (runtime type-stripping), and low-hanging fruit.
 metadata:
   author: mindoktor
-  version: "1.14"
+  version: "1.15"
   shareable-skills.owner-prefix: "md"
   shareable-skills.owner: "mindoktor/agentic-tools"
   shareable-skills.domain: "js"
   shareable-skills.visibility: "organization"
-  shareable-skills.vendored-sha: "f996033"
-  shareable-skills.vendored-time: "2026-07-13"
   shareable-skills.requires: "ref-md-dev-coding-patterns"
+  shareable-skills.vendored-sha: "a596295"
+  shareable-skills.vendored-time: "2026-07-19"
 ---
 
 # Mindoktor TypeScript Conventions

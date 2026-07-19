@@ -62,9 +62,9 @@ The `Values` helper lives at a different import path per app — patient-app exp
 
 ```ts
 // patient-app (mindoktor-app)
-import { type Values } from '@mindoktor/utils/types/objects';
+import type { Values } from '@mindoktor/utils/types/objects';
 // clinic-app (mindoktor)
-import { type Values } from '@common/utils/objects';
+import type { Values } from '@common/utils/objects';
 ```
 
 Compare against the constant, never the raw string/number literal — this covers `===` checks and `switch` cases:

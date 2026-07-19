@@ -121,15 +121,14 @@ import { type Case } from '../models/cases';
 import type { Case } from '../models/cases';
 ```
 
-When the same module gives you both values and types, split them onto separate lines instead of mixing `type` inline. Splitting lets the type-only line be erased cleanly and avoids confusing bundlers:
+When the same module gives you both a value and a type, mark the type specifier inline — one import line, and the specifier is still erased at compile time. Don't split it into a separate `import type` statement: the value keeps the module imported at runtime either way, so both forms emit identical JavaScript.
 
 ```ts
-// Before — inline type keyword
-import { type Theme, Box } from '@mui/material';
+// Before — no `type` modifier, so `Theme` is emitted as a runtime binding
+import { Box, Theme } from '@mui/material';
 
-// After — separate statements
-import type { Theme } from '@mui/material';
-import Box from '@mui/material/Box';
+// After — inline `type` marks the type-only specifier
+import { Box, type Theme } from '@mui/material';
 ```
 
 ---
@@ -179,8 +178,8 @@ Remove `index.ts` files you encounter and update callers to import from the spec
 type Direction = 'UP' | 'DOWN'; // duplicates the const object
 
 // After (import path is app-specific — see "Deep Relative Imports" above)
-import { type Values } from '@mindoktor/utils/types/objects'; // patient-app
-// import { type Values } from '@common/utils/objects';       // clinic-app
+import type { Values } from '@mindoktor/utils/types/objects'; // patient-app
+// import type { Values } from '@common/utils/objects';       // clinic-app
 export type Direction = Values<typeof Direction>;
 ```
 
