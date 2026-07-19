@@ -89,13 +89,19 @@ For the full list of forbidden patterns, correct patterns, accidental-exposure p
 
 ## Skills
 
-The skills here are **vendored from [`agentic-tools`](https://github.com/mindoktor/agentic-tools)** — pinned copies carrying `shareable-skills.vendored-sha` + `shareable-skills.vendored-time` provenance metadata and a "do not edit this copy" notice. Edit those upstream and re-vendor; local edits are overwritten. Vendoring conventions live in `ref-md-agents-shareable-skills`.
+Most skills here are **vendored from [`agentic-tools`](https://github.com/mindoktor/agentic-tools)** — pinned copies carrying `shareable-skills.vendored-sha` + `shareable-skills.vendored-time` provenance metadata and a "do not edit this copy" notice. Edit those upstream and re-vendor; local edits are overwritten. Vendoring conventions live in `ref-md-agents-shareable-skills`. The one exception is `ref-md-dev-eslint-config`, which is **repo-local** to this repo (authored here, not vendored) — edit it in place.
 
 This repo intentionally vendors a **subset** of what the consuming apps carry — the cross-cutting agents/meta skills plus the TypeScript language skills. React, MUI, Redux, TanStack Query, Next.js, Go, and DB skills are **deliberately omitted**: this package has no such runtime code. If a future need arises, vendor from `agentic-tools`, keeping this repo a subset of what `mindoktor` and `mindoktor-app` already vendor.
 
 **When starting a task — or whenever the work shifts into a new area**, load `tool-md-read-skills` first — it scans the conversation and loads the relevant project and global skills for the work at hand.
 
 **Before creating or modifying any file under `.claude/skills/`**, load `ref-md-agents-skills-authoring` first.
+
+### This repo (repo-local)
+
+| Task                                                                               | Skill file                                          |
+| ---------------------------------------------------------------------------------- | --------------------------------------------------- |
+| Cutting a release, the release-it flow, exported configs, rule-change blast radius | `.claude/skills/ref-md-dev-eslint-config/SKILL.md`  |
 
 ### TypeScript (vendored)
 
