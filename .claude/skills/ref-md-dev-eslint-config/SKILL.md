@@ -57,9 +57,25 @@ Entry: [`src/index.ts`](../../../src/index.ts) exports a `configs` object with t
 - **`no-unused-vars` is intentionally handled by `unused-imports`**, not typescript-eslint — `recommended.ts` turns the tseslint rule off and delegates. Don't "restore" the tseslint rule.
 - **`dist` is gitignored** and only committed onto a version branch at release time. Do not commit `dist/` to `develop`.
 
+## Verifying a Change Against a Consumer
+
+A config change has no runtime surface of its own; its only observable effect is the lint output it produces in a consumer. `yarn lint` against `examples/` is a quick first check, but it does not prove what the change does to real project code. For anything beyond a trivial edit, verify against a real consumer in an **isolated, branched worktree** so you can see the exact before/after and confirm nothing changed that you did not intend.
+
+Use whichever consumer repo is cloned locally. Preferred is **CLINIC_APP** (in the `mindoktor` repo), which depends on this package by git URL and is simple to repoint; the `mindoktor-app` repo is the alternative. Locate the checkout rather than assuming a path (it is a working directory in this session), and always work in a **worktree**, never the consumer's main checkout, so its normal state is untouched.
+
+| Step | What                                                                                                 | Why                                                                          |
+| ---- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| 1    | In the consumer repo, add a throwaway worktree on a new branch off its default branch                | Keeps the consumer's main checkout and branches clean                        |
+| 2    | Run the consumer's lint first and capture the baseline output                                        | The baseline is what you diff against; skip it and "no change" is unprovable |
+| 3    | Point the consumer's `@mindoktor/eslint-config` dependency at your change, reinstall, run lint again | This is what surfaces the real effect on real code                           |
+| 4    | Diff the two lint runs                                                                               | No diff confirms an unintended-change-free edit; a diff must match intent    |
+| 5    | Remove the worktree when done                                                                        | No leftover branches or installs                                             |
+
+**Getting your change into the consumer.** The dependency is a git URL (CLINIC_APP pins `mindoktor/eslint-config#^2.2.1`), so repoint it at your branch: `@mindoktor/eslint-config@mindoktor/eslint-config#<your-branch>`, then reinstall. **Caveat (see Gotchas):** `dist/` is only built onto a *version* branch at release time, not onto feature branches, so a plain feature branch has no `dist/` to resolve. Either test against a released version branch cut from your change, or build `dist/` locally (`yarn cleanbuild`) and point the consumer at your local build. Confirm the consumer actually picked up your version before trusting the lint diff.
+
 ## Standard Commands
 
-`yarn lint` · `yarn lint:fix` · `yarn build` (tsc → `dist/`) · `yarn typecheck` · `yarn cleanbuild` · `yarn release`. A config change has no runtime surface of its own — verify it by running `yarn lint` against `examples/` or a consumer repo and confirming the intended rule output.
+`yarn lint` · `yarn lint:fix` · `yarn build` (tsc → `dist/`) · `yarn typecheck` · `yarn cleanbuild` · `yarn release`. For how to verify a change's real effect, see *Verifying a Change Against a Consumer* above.
 
 ## Related Skills
 
