@@ -30,8 +30,8 @@ export default defineConfig(
   globalIgnores([
     'dist/', // ignore entire dist directory
     'node_modules/',
-    // Agent tooling dirs, ignored so ESLint doesn't try to parse the scripts
-    // agents keep here (they aren't part of this package's source).
+    // Agent tooling dirs, ignored so ESLint doesn't try to parse the agent
+    // scripts they contain (which aren't part of this package's source).
     '.claude/',
     '.agents/',
   ]),
