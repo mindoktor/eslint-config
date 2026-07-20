@@ -4,9 +4,8 @@ import reactHooksPlugin from 'eslint-plugin-react-hooks';
 
 import { mindoktorRecommended } from './recommended.js';
 
-// v7's `configs.flat` grouping does not fit ESLint's Plugin type (every
-// `configs` value must itself be a config), so we register the plugin
-// without its `configs` — ESLint only reads `meta` and `rules` anyway
+// reactHooksPlugin v7's `configs.flat` does not fit ESLint's Plugin type,
+// so we adapt the plugin to match the expected type
 const { configs: _configs, ...reactHooksPluginBase } = reactHooksPlugin;
 
 export const mindoktorReactRecommended = defineConfig({
