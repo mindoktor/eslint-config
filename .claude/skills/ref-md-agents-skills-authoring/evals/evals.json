@@ -1,0 +1,45 @@
+{
+  "skill_name": "ref-md-agents-skills-authoring",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create a new project skill called tool-md-deploy that helps deploy services to production. It should cover pre-deploy checks, deployment steps, and rollback procedures. Put it in .claude/skills/tool-md-deploy/.",
+      "expected_output": "A SKILL.md with valid YAML frontmatter (name: tool-md-deploy, description with 'Use when:' and 'Covers'), a routing table pointing to reference files, kebab-case folder name, and the tool- prefix since it's an action skill.",
+      "assertions": [
+        "SKILL.md has YAML frontmatter with name: tool-md-deploy",
+        "description uses imperative phrasing and includes 'Use when:' triggers",
+        "description is under 1024 characters",
+        "name in frontmatter matches the folder name (tool-md-deploy)",
+        "File contains a routing table mapping tasks to reference files",
+        "Reference files use relative paths (./references/ or references/)",
+        "Folder name uses kebab-case",
+        "Skill uses tool- prefix because it orchestrates a deployment action"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I have a skill called helpers that crams our TypeScript conventions, React patterns, and testing guidelines all into one SKILL.md. Review it and tell me what's wrong.",
+      "expected_output": "Identifies that the skill violates one-responsibility-per-skill by mixing unrelated concerns, has a vague unprefixed name, and should be split into separate skills (e.g., ref-md-js-typescript, ref-md-js-react, ref-md-js-tests). Should recommend moving detailed content to references/ and keeping SKILL.md as a dispatcher.",
+      "files": ["evals/files/bloated-skill.md"],
+      "assertions": [
+        "Identifies that the skill mixes multiple unrelated responsibilities in one SKILL.md",
+        "Recommends splitting into multiple skills, one per concern",
+        "Suggests moving detailed content to references/ subdirectory",
+        "Recommends ref- prefix since these are convention/knowledge skills, not action workflows",
+        "Does NOT suggest tool- prefix for pure convention documentation"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write a skill for our team's Jira workflow conventions — how we name tickets, what fields are required, how we transition statuses. This is just documentation for the agent to follow, developers won't invoke it directly.",
+      "expected_output": "A skill with ref- prefix (e.g., ref-md-biz-jira-conventions), valid frontmatter, concise SKILL.md dispatcher routing to reference files for each topic area. Should NOT use tool- prefix since the user explicitly said it's background documentation, not a dev-invoked action.",
+      "assertions": [
+        "Skill uses ref- prefix, not tool-",
+        "SKILL.md has valid YAML frontmatter with name matching folder",
+        "Description explains this is reference material for agent consumption",
+        "Content is organized with a routing table, not a monolithic doc",
+        "Does not orchestrate any multi-step workflow or action"
+      ]
+    }
+  ]
+}
