@@ -1,9 +1,13 @@
-import type { ESLint } from 'eslint';
 import { defineConfig } from 'eslint/config';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 
 import { mindoktorRecommended } from './recommended.js';
+
+// v7's `configs.flat` grouping does not fit ESLint's Plugin type (every
+// `configs` value must itself be a config), so we register the plugin
+// without its `configs` — ESLint only reads `meta` and `rules` anyway
+const { configs: _configs, ...reactHooksPluginBase } = reactHooksPlugin;
 
 export const mindoktorReactRecommended = defineConfig({
   extends: [
@@ -12,9 +16,7 @@ export const mindoktorReactRecommended = defineConfig({
     reactPlugin.configs.flat['jsx-runtime'],
   ],
   plugins: {
-    // The cast is needed because the v7 types nest `configs.flat`, which the
-    // ESLint Plugin type does not model
-    'react-hooks': reactHooksPlugin as unknown as ESLint.Plugin,
+    'react-hooks': reactHooksPluginBase,
   },
   rules: {
     // We keep only the rules we were already using, we can think later if we
