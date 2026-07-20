@@ -80,6 +80,11 @@ export const mindoktorRecommended = defineConfig(
     rules: {
       'import/enforce-node-protocol-usage': ['error', 'always'],
       'import/export': 'error',
+      // Enforce separate-line type imports over the inline `type` keyword on
+      // value imports. consistent-type-imports only marks type imports as types;
+      // it treats inline (`import { type X }`) and top-level (`import type { X }`)
+      // as equally valid. This rule requires the top-level form for cleaner erasure.
+      'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
       'import/first': 'error',
       'import/newline-after-import': 'error',
       'import/no-absolute-path': 'error',
