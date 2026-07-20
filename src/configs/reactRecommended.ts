@@ -17,8 +17,9 @@ export const mindoktorReactRecommended = defineConfig({
     'react-hooks': reactHooksPlugin as unknown as ESLint.Plugin,
   },
   rules: {
-    // Classic hooks rules only — the v7 presets would also opt every consumer
-    // into the experimental React Compiler rules, which is a separate decision
+    // We keep only the rules we were already using, we can think later if we
+    // need any additional ones.
+    // See: https://github.com/facebook/react/tree/main/packages/eslint-plugin-react-hooks
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
 
