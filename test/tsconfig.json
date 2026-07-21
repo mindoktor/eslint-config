@@ -1,0 +1,15 @@
+// Project for the rule-drift harness itself (the .mts test and the .mjs
+// fixtures config) — NOT the deliberately-broken fixtures, which live in
+// their own tsconfig.fixtures.json. The root tsconfig excludes all of test/
+// so this tooling never ships in dist/; this project exists so `yarn lint`'s
+// typed rules and a `yarn typecheck` of the harness can resolve it.
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    // The harness uses node: builtins and globals (process, etc.).
+    "types": ["node"]
+  },
+  "exclude": ["../node_modules", "../dist"],
+  "include": ["*.mts"]
+}

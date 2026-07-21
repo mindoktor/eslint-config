@@ -34,5 +34,9 @@ export default defineConfig(
     // scripts they contain (which aren't part of this package's source).
     '.claude/',
     '.agents/',
+    // Deliberately-broken rule-drift fixtures. The default `yarn lint` must
+    // stay green, so they are ignored here; the rule-drift harness lints them
+    // on demand with test/eslint.fixtures.config.mjs.
+    'test/fixtures/fail/',
   ]),
 );
