@@ -36,7 +36,7 @@ export default defineConfig(
     '.agents/',
     // Deliberately-broken rule-drift fixtures. The default `yarn lint` must
     // stay green, so they are ignored here; the rule-drift harness lints them
-    // on demand with test/eslint.fixtures.config.mjs.
+    // on demand with test/eslint.fixtures.config.mts.
     'test/fixtures/fail/',
   ]),
 );

@@ -1,10 +1,5 @@
 name: CI Checks
 
-# contents/pull-requests write are required for the Dependabot auto-merge step.
-permissions:
-  contents: write
-  pull-requests: write
-
 on:
   push:
     branches: [ main, develop ]
@@ -13,6 +8,12 @@ on:
 jobs:
   lint_typecheck:
     runs-on: ubuntu-latest
+
+    # Scoped to this job (not the whole workflow) so the write-capable token is
+    # only present where the auto-merge step needs it, per least privilege.
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
     - uses: actions/checkout@v4
@@ -31,7 +32,7 @@ jobs:
     # job and this step never runs. That in-job gate is what keeps auto-merge safe
     # without branch protection (see the agentic-tools dependabot post-mortem).
     - name: Dependabot auto-merge
-      if: github.event.pull_request.user.login == 'dependabot[bot]' && github.event.pull_request.base.ref == 'develop'
+      if: github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]' && github.event.pull_request.base.ref == 'develop'
       run: gh pr merge --auto --squash "$PR_URL"
       env:
         PR_URL: ${{ github.event.pull_request.html_url }}
