@@ -1,6 +1,9 @@
 name: CI Checks
+
+# contents/pull-requests write are required for the Dependabot auto-merge step.
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
 
 on:
   push:
@@ -21,3 +24,14 @@ jobs:
     - run: yarn lint
     - run: yarn typecheck
     - run: yarn build
+
+    # Auto-merge Dependabot PRs. This runs as the last step of the same job, so
+    # the checks above must pass first — a failing lint/typecheck/build fails the
+    # job and this step never runs. That in-job gate is what keeps auto-merge safe
+    # without branch protection (see the agentic-tools dependabot post-mortem).
+    - name: Dependabot auto-merge
+      if: github.event.pull_request.user.login == 'dependabot[bot]' && github.event.pull_request.base.ref == 'develop'
+      run: gh pr merge --auto --squash "$PR_URL"
+      env:
+        PR_URL: ${{ github.event.pull_request.html_url }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
