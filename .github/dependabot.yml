@@ -1,0 +1,28 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 1
+    # This package's dependencies are all the ESLint ecosystem, which moves in
+    # lockstep (plugins pinned to matching parser/core majors). Group them into
+    # one PR so the whole set is verified against yarn lint/build/typecheck at
+    # once, rather than opening a dozen separate PRs that each shift one piece.
+    groups:
+      eslint-ecosystem:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 1
