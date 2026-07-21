@@ -142,3 +142,4 @@ vite.config.ts.timestamp-*
 .agents/playground/
 .agents/tasks/
 .claude/settings.local.json
+.claude/worktrees/
