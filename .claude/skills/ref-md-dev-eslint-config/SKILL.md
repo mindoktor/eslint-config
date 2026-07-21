@@ -6,10 +6,11 @@ description: >-
   running release-it, changing an exported config or a lint rule, adding a config
   export, or judging the blast radius of a rule change across consumers.
   Covers the non-standard release model (git-branch-per-version, no npm publish),
-  the exported configs, the load-order gotcha, and consumer install.
+  the exported configs, the load-order gotcha, consumer install, and the
+  rule-drift snapshot harness that guards against rules silently changing.
 metadata:
   author: mindoktor
-  version: "1.0"
+  version: "1.1"
   shareable-skills.owner-prefix: "md"
   shareable-skills.owner: "mindoktor/eslint-config"
   shareable-skills.domain: "dev"
@@ -61,6 +62,14 @@ Entry: [`src/index.ts`](../../../src/index.ts) exports a `configs` object with t
 
 A config change has no runtime surface of its own; its only observable effect is the lint output it produces in a consumer. `yarn lint` against `examples/` is a quick first check, but it does not prove what the change does to real project code. For anything beyond a trivial edit, verify against a real consumer in an **isolated, branched worktree** so you can see the exact before/after and confirm nothing changed that you did not intend.
 
+### Rule-drift harness (`yarn test`)
+
+Before the consumer diff, there is a faster local guard: `yarn test` runs a **rule-drift snapshot test**. It lints and typechecks a set of deliberately-broken fixtures in `test/fixtures/fail/` (each triggering one specific rule) and asserts that the set of ESLint rule IDs and `tsc` error codes firing per fixture matches the committed `test/ruleDrift.snapshot.json`. The snapshot is normalized — sorted rule IDs / TS codes only, no file paths, line/column, or message text — so it fails only on real rule drift, not on line shifts or tool-version phrasing.
+
+- **When you change a rule on purpose:** the snapshot will drift and `yarn test` will fail. Re-baseline with `yarn test:update` and review the snapshot diff — that diff is a precise record of what your change altered, and it belongs in the PR.
+- **When a rule fires that a fixture doesn't cover:** add a fixture in `test/fixtures/fail/` (with a header comment naming the intended rule) and `yarn test:update`, so the rule is pinned against future drift.
+- **Why it exists:** it catches a dependency bump silently weakening or renaming a rule — a change that passes `yarn lint`/`typecheck`/`build` green but ships altered enforcement to consumers. That matters because Dependabot auto-merges green bumps weekly (`.github/dependabot.yml` + the auto-merge step in `ci.yml`), so a green-but-drifted bump would otherwise merge itself.
+
 Use whichever consumer repo is cloned locally. Preferred is **CLINIC_APP** (in the `mindoktor` repo), which depends on this package by git URL and is simple to repoint; the `mindoktor-app` repo is the alternative. Locate the checkout rather than assuming a path (it is a working directory in this session), and always work in a **worktree**, never the consumer's main checkout, so its normal state is untouched.
 
 | Step | What                                                                                                 | Why                                                                          |
@@ -75,7 +84,7 @@ Use whichever consumer repo is cloned locally. Preferred is **CLINIC_APP** (in t
 
 ## Standard Commands
 
-`yarn lint` · `yarn lint:fix` · `yarn build` (tsc → `dist/`) · `yarn typecheck` · `yarn cleanbuild` · `yarn release`. For how to verify a change's real effect, see *Verifying a Change Against a Consumer* above.
+`yarn lint` · `yarn lint:fix` · `yarn build` (tsc → `dist/`) · `yarn typecheck` · `yarn test` (rule-drift snapshot) · `yarn test:update` (re-baseline it) · `yarn cleanbuild` · `yarn release`. For how to verify a change's real effect, see *Verifying a Change Against a Consumer* above.
 
 ## Related Skills
 

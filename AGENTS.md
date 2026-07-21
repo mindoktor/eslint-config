@@ -24,6 +24,7 @@ The package itself contains **no React, MUI, Redux, TanStack Query, Next.js, or 
 | `src/configs/reactRecommended.ts` | React config layered on top of `recommended`                               |
 | `src/configs/stylistic.ts`        | Stylistic rules                                                            |
 | `examples/`                       | Sample code the config is exercised against                                |
+| `test/`                           | Rule-drift harness — broken fixtures + committed snapshot (`yarn test`)    |
 | `eslint.config.ts`                | This repo's own lint config (dogfoods the package)                         |
 
 `eslint-plugin-react` and `eslint-plugin-react-hooks` are **optional** peer dependencies — the React config only applies when a consumer installs them.
@@ -44,13 +45,17 @@ yarn lint            # ESLint over this repo (dogfoods the config)
 yarn lint:fix        # Auto-fix
 yarn build           # tsc → dist/
 yarn typecheck       # tsc --noEmit
+yarn test            # rule-drift snapshot test (pretest builds first)
+yarn test:update     # re-baseline the rule-drift snapshot after an intended change
 yarn cleanbuild      # clean + build
 yarn release         # release-it --only-version (version bump + publish)
 ```
 
 ### Verification after a set of changes
 
-Run `yarn typecheck` and `yarn lint` before considering a change done. When you change a rule in `src/configs/`, also run `yarn build` and confirm the intended behavior on `examples/` (or a consumer repo) — a config change has no runtime surface of its own; its only observable effect is the lint output it produces.
+Run `yarn typecheck`, `yarn lint`, and `yarn test` before considering a change done. When you change a rule in `src/configs/`, also run `yarn build` and confirm the intended behavior on `examples/` (or a consumer repo) — a config change has no runtime surface of its own; its only observable effect is the lint output it produces.
+
+`yarn test` runs the **rule-drift harness**: it lints/typechecks a set of deliberately-broken fixtures in `test/fixtures/fail/` and asserts the set of rules and TS codes that fire matches a committed snapshot (`test/ruleDrift.snapshot.json`). If you intentionally change what a rule does, the snapshot will drift and the test will fail — re-baseline with `yarn test:update` and review the diff as part of your change. This is what catches a dependency bump silently weakening a rule, which matters because Dependabot auto-merges green bumps weekly.
 
 ## Code Quality
 
