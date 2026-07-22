@@ -36,7 +36,8 @@ jobs:
   # NOTE: full auto-merge also needs two repo settings this workflow can't set:
   # the "Allow auto-merge" repo setting, and a branch rule on develop with a
   # required check — without a pending requirement, a PR that isn't immediately
-  # mergeable has no deferred merge to enable. See ref-*-dev-github-dependabot.
+  # mergeable has no deferred merge to enable. See GitHub's auto-merge docs:
+  # https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request
   dependabot-automerge:
     needs: lint_typecheck
     if: github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]' && github.event.pull_request.base.ref == 'develop'
