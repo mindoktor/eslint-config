@@ -1,5 +1,9 @@
 name: CI Checks
 
+# Read-only by default; the auto-merge job below elevates its own permissions.
+permissions:
+  contents: read
+
 on:
   push:
     branches: [ main, develop ]
@@ -8,12 +12,6 @@ on:
 jobs:
   lint_typecheck:
     runs-on: ubuntu-latest
-
-    # Scoped to this job (not the whole workflow) so the write-capable token is
-    # only present where the auto-merge step needs it, per least privilege.
-    permissions:
-      contents: write
-      pull-requests: write
 
     steps:
     - uses: actions/checkout@v4
@@ -27,12 +25,24 @@ jobs:
     - run: yarn build
     - run: yarn test
 
-    # Auto-merge Dependabot PRs. This runs as the last step of the same job, so
-    # the checks above must pass first — a failing lint/typecheck/build fails the
-    # job and this step never runs. That in-job gate is what keeps auto-merge safe
-    # without branch protection (see the agentic-tools dependabot post-mortem).
-    - name: Dependabot auto-merge
-      if: github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]' && github.event.pull_request.base.ref == 'develop'
+  # Auto-merge Dependabot PRs, gated on the checks passing via `needs:`. Kept a
+  # separate job (not a trailing step) so the checks job stays read-only and the
+  # write-capable token exists only here — the untrusted dependency changes run
+  # under the read-only checks job, never under this write-scoped one.
+  #
+  # NOTE: full auto-merge also needs two repo settings this workflow can't set:
+  # the "Allow auto-merge" repo setting, and a branch rule on develop with a
+  # required check — without a pending requirement, a PR that isn't immediately
+  # mergeable has no deferred merge to enable. See ref-*-dev-github-dependabot.
+  dependabot-automerge:
+    needs: lint_typecheck
+    if: github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]' && github.event.pull_request.base.ref == 'develop'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+    - name: Enable auto-merge for Dependabot PRs
       run: gh pr merge --auto --squash "$PR_URL"
       env:
         PR_URL: ${{ github.event.pull_request.html_url }}

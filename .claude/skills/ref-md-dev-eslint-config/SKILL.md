@@ -68,7 +68,7 @@ Before the consumer diff, there is a faster local guard: `yarn test` runs a **ru
 
 - **When you change a rule on purpose:** the snapshot will drift and `yarn test` will fail. Re-baseline with `yarn test:update` and review the snapshot diff — that diff is a precise record of what your change altered, and it belongs in the PR.
 - **When a rule fires that a fixture doesn't cover:** add a fixture in `test/fixtures/fail/` (with a header comment naming the intended rule) and `yarn test:update`, so the rule is pinned against future drift.
-- **Why it exists:** it catches a dependency bump silently weakening or renaming a rule — a change that passes `yarn lint`/`typecheck`/`build` green but ships altered enforcement to consumers. That matters because Dependabot auto-merges green bumps weekly (`.github/dependabot.yml` + the auto-merge step in `ci.yml`), so a green-but-drifted bump would otherwise merge itself.
+- **Why it exists:** it catches a dependency bump silently weakening or renaming a rule — a change that passes `yarn lint`/`typecheck`/`build` green but ships altered enforcement to consumers. That matters because Dependabot auto-merges green bumps weekly (`.github/dependabot.yml` + the `dependabot-automerge` job in `ci.yml`), so a green-but-drifted bump would otherwise merge itself.
 
 Use whichever consumer repo is cloned locally. Preferred is **CLINIC_APP** (in the `mindoktor` repo), which depends on this package by git URL and is simple to repoint; the `mindoktor-app` repo is the alternative. Locate the checkout rather than assuming a path (it is a working directory in this session), and always work in a **worktree**, never the consumer's main checkout, so its normal state is untouched.
 
