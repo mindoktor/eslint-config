@@ -10,7 +10,7 @@ description: >-
   rule-drift snapshot harness that guards against rules silently changing.
 metadata:
   author: mindoktor
-  version: "1.1"
+  version: "1.2"
   shareable-skills.owner-prefix: "md"
   shareable-skills.owner: "mindoktor/eslint-config"
   shareable-skills.domain: "dev"
@@ -60,15 +60,22 @@ Entry: [`src/index.ts`](../../../src/index.ts) exports a `configs` object with t
 
 ## Verifying a Change Against a Consumer
 
-A config change has no runtime surface of its own; its only observable effect is the lint output it produces in a consumer. `yarn lint` against `examples/` is a quick first check, but it does not prove what the change does to real project code. For anything beyond a trivial edit, verify against a real consumer in an **isolated, branched worktree** so you can see the exact before/after and confirm nothing changed that you did not intend.
+A config change has no runtime surface of its own; its only observable effect is the lint output it produces in a consumer. `yarn test` (the rule-drift harness below) is the fast first check; it does not prove what the change does to real project code, so for anything beyond a trivial edit, also verify against a real consumer in an **isolated, branched worktree** so you can see the exact before/after and confirm nothing changed that you did not intend.
 
 ### Rule-drift harness (`yarn test`)
 
-Before the consumer diff, there is a faster local guard: `yarn test` runs a **rule-drift snapshot test**. It lints and typechecks a set of deliberately-broken fixtures in `test/fixtures/fail/` (each triggering one specific rule) and asserts that the set of ESLint rule IDs and `tsc` error codes firing per fixture matches the committed `test/ruleDrift.snapshot.json`. The snapshot is normalized — sorted rule IDs / TS codes only, no file paths, line/column, or message text — so it fails only on real rule drift, not on line shifts or tool-version phrasing.
+Before the consumer diff, there is a faster local guard: `yarn test` runs a **rule-drift snapshot test**. It lints and typechecks the fixtures under `test/fixtures/` and asserts that the set of ESLint rule IDs and `tsc` error codes firing per fixture matches the committed `test/ruleDrift.snapshot.json`. The snapshot is normalized — sorted rule IDs / TS codes only, no file paths, line/column, or message text — so it fails only on real rule drift, not on line shifts or tool-version phrasing.
+
+Fixtures pin drift in **both directions**:
+
+- `test/fixtures/fail/` — deliberately-broken code; each file must keep firing its specific rule. Catches a bump silently **weakening or renaming** a rule.
+- `test/fixtures/succeed/` — clean code that exercises the config's **intentional allowances** (e.g. numbers/booleans in template literals, `_`-prefixed unused vars); each file must keep firing **nothing**. Catches a bump making a rule **stricter** so it starts firing on code we mean to allow.
+
+Working with it:
 
 - **When you change a rule on purpose:** the snapshot will drift and `yarn test` will fail. Re-baseline with `yarn test:update` and review the snapshot diff — that diff is a precise record of what your change altered, and it belongs in the PR.
-- **When a rule fires that a fixture doesn't cover:** add a fixture in `test/fixtures/fail/` (with a header comment naming the intended rule) and `yarn test:update`, so the rule is pinned against future drift.
-- **Why it exists:** it catches a dependency bump silently weakening or renaming a rule — a change that passes `yarn lint`/`typecheck`/`build` green but ships altered enforcement to consumers. That matters because Dependabot auto-merges green bumps weekly (`.github/dependabot.yml` + the `dependabot-automerge` job in `ci.yml`), so a green-but-drifted bump would otherwise merge itself.
+- **When a rule fires that no fixture covers:** add a fixture in `test/fixtures/fail/` (header comment naming the intended rule); when the config newly *allows* something, add a `test/fixtures/succeed/` case. Then `yarn test:update` to pin it. A succeed fixture must pass honestly — never with an `eslint-disable`, or it proves nothing.
+- **Why it exists:** it catches a dependency bump silently changing enforcement — weakening a rule, or tightening one onto allowed code — a change that passes `yarn lint`/`typecheck`/`build` green but ships altered behavior to consumers. That matters because Dependabot auto-merges green bumps weekly (`.github/dependabot.yml` + the `dependabot-automerge` job in `ci.yml`), so a green-but-drifted bump would otherwise merge itself.
 
 Use whichever consumer repo is cloned locally. Preferred is **CLINIC_APP** (in the `mindoktor` repo), which depends on this package by git URL and is simple to repoint; the `mindoktor-app` repo is the alternative. Locate the checkout rather than assuming a path (it is a working directory in this session), and always work in a **worktree**, never the consumer's main checkout, so its normal state is untouched.
 

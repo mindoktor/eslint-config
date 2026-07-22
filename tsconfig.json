@@ -18,7 +18,7 @@
     // emitted into dist/ (which is what ships) nor typechecked by the root
     // `yarn build`/`yarn typecheck`. It carries its own projects instead —
     // test/tsconfig.json for the harness, test/tsconfig.fixtures.json for the
-    // deliberately-broken fixtures.
+    // fail/ and succeed/ fixtures.
     "test"
   ],
   "compilerOptions": {

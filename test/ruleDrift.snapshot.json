@@ -40,5 +40,9 @@
       "unused-imports/no-unused-imports"
     ],
     "tsc": []
+  },
+  "test/fixtures/succeed/allowedEdges.ts": {
+    "eslint": [],
+    "tsc": []
   }
 }

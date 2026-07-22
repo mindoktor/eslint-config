@@ -2,11 +2,17 @@
 //
 // The config in this package has no runtime of its own; its only observable
 // effect is the lint/type output it produces. This test pins that output: it
-// runs ESLint and tsc over a set of deliberately-broken fixtures and asserts
-// that the *set of rules/codes that fire per fixture* matches a committed
-// snapshot. If a dependency bump (or a config edit) silently weakens or
-// changes a rule, the fired-rule set drifts and this test fails — the guard
-// that keeps the auto-merged weekly Dependabot bumps honest.
+// runs ESLint and tsc over a set of fixtures and asserts that the *set of
+// rules/codes that fire per fixture* matches a committed snapshot. It pins
+// drift in both directions:
+//   - fixtures/fail/    — deliberately-broken code; each file must keep firing
+//     its specific rule(s). Catches a bump silently WEAKENING or renaming a
+//     rule (it stops firing).
+//   - fixtures/succeed/ — clean code exercising the config's intentional
+//     allowances; each file must keep firing NOTHING. Catches a bump making a
+//     rule stricter so it starts firing on code we mean to allow.
+// Either direction failing is the guard that keeps the auto-merged weekly
+// Dependabot bumps honest.
 //
 // What is captured is normalized on purpose: only the sorted rule IDs / TS
 // error codes per fixture, never file paths, line/column, or message text.
@@ -25,7 +31,10 @@ import { fileURLToPath } from 'node:url';
 
 const testDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(testDir, '..');
-const fixturesDir = resolve(testDir, 'fixtures/fail');
+// Cover both fail/ and succeed/ — ESLint's JSON formatter emits an entry for
+// every linted file (clean files included, with an empty messages array), so a
+// succeed fixture lands in the snapshot as { eslint: [], tsc: [] }.
+const fixturesDir = resolve(testDir, 'fixtures');
 const snapshotPath = resolve(testDir, 'ruleDrift.snapshot.json');
 const shouldUpdate = process.env.UPDATE_SNAPSHOT === '1';
 

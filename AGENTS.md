@@ -17,15 +17,14 @@ The package itself contains **no React, MUI, Redux, TanStack Query, Next.js, or 
 
 ### Repository structure
 
-| Path                              | What                                                                       |
-| --------------------------------- | -------------------------------------------------------------------------- |
-| `src/index.ts`                    | Package entry — exports the `configs` object                               |
-| `src/configs/recommended.ts`      | Base recommended config (TS, imports, unused-imports, prettier)            |
-| `src/configs/reactRecommended.ts` | React config layered on top of `recommended`                               |
-| `src/configs/stylistic.ts`        | Stylistic rules                                                            |
-| `examples/`                       | Sample code the config is exercised against                                |
-| `test/`                           | Rule-drift harness — broken fixtures + committed snapshot (`yarn test`)    |
-| `eslint.config.ts`                | This repo's own lint config (dogfoods the package)                         |
+| Path                              | What                                                                  |
+| --------------------------------- | --------------------------------------------------------------------- |
+| `src/index.ts`                    | Package entry — exports the `configs` object                          |
+| `src/configs/recommended.ts`      | Base recommended config (TS, imports, unused-imports, prettier)       |
+| `src/configs/reactRecommended.ts` | React config layered on top of `recommended`                          |
+| `src/configs/stylistic.ts`        | Stylistic rules                                                       |
+| `test/`                           | Rule-drift harness — fail + succeed fixtures + snapshot (`yarn test`) |
+| `eslint.config.ts`                | This repo's own lint config (dogfoods the package)                    |
 
 `eslint-plugin-react` and `eslint-plugin-react-hooks` are **optional** peer dependencies — the React config only applies when a consumer installs them.
 
@@ -53,9 +52,9 @@ yarn release         # release-it --only-version (version bump + publish)
 
 ### Verification after a set of changes
 
-Run `yarn typecheck`, `yarn lint`, and `yarn test` before considering a change done. When you change a rule in `src/configs/`, also run `yarn build` and confirm the intended behavior on `examples/` (or a consumer repo) — a config change has no runtime surface of its own; its only observable effect is the lint output it produces.
+Run `yarn typecheck`, `yarn lint`, and `yarn test` before considering a change done. When you change a rule in `src/configs/`, also run `yarn build` and confirm the intended behavior via the fixtures (or a consumer repo) — a config change has no runtime surface of its own; its only observable effect is the lint output it produces.
 
-`yarn test` runs the **rule-drift harness**: it lints/typechecks a set of deliberately-broken fixtures in `test/fixtures/fail/` and asserts the set of rules and TS codes that fire matches a committed snapshot (`test/ruleDrift.snapshot.json`). If you intentionally change what a rule does, the snapshot will drift and the test will fail — re-baseline with `yarn test:update` and review the diff as part of your change. This is what catches a dependency bump silently weakening a rule, which matters because Dependabot auto-merges green bumps weekly.
+`yarn test` runs the **rule-drift harness**: it lints/typechecks the fixtures under `test/fixtures/` and asserts the set of rules and TS codes that fire per fixture matches a committed snapshot (`test/ruleDrift.snapshot.json`). Fixtures come in two directions — `fixtures/fail/` (broken code that must keep firing its specific rule) and `fixtures/succeed/` (clean code exercising the config's intentional allowances that must keep firing nothing). If you intentionally change what a rule does, the snapshot will drift and the test will fail — re-baseline with `yarn test:update` and review the diff as part of your change. This catches a dependency bump silently weakening a rule *or* making one stricter on code we mean to allow, which matters because Dependabot auto-merges green bumps weekly.
 
 ## Code Quality
 
@@ -104,9 +103,9 @@ This repo intentionally vendors a **subset** of what the consuming apps carry �
 
 ### This repo (repo-local)
 
-| Task                                                                               | Skill file                                          |
-| ---------------------------------------------------------------------------------- | --------------------------------------------------- |
-| Cutting a release, the release-it flow, exported configs, rule-change blast radius | `.claude/skills/ref-md-dev-eslint-config/SKILL.md`  |
+| Task                                                                               | Skill file                                         |
+| ---------------------------------------------------------------------------------- | -------------------------------------------------- |
+| Cutting a release, the release-it flow, exported configs, rule-change blast radius | `.claude/skills/ref-md-dev-eslint-config/SKILL.md` |
 
 ### TypeScript (vendored)
 

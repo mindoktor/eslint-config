@@ -1,9 +1,9 @@
-// Dedicated tsconfig for the rule-drift fixtures under test/fixtures/fail/.
-// The fixtures are deliberately broken, so they are excluded from the root
-// tsconfig (which must stay green for `yarn typecheck`/`yarn build`). This
-// project exists only so the rule-drift harness can typecheck and typed-lint
-// them on demand — the strictTypeChecked ESLint rules need a real project to
-// resolve types against.
+// Dedicated tsconfig for the rule-drift fixtures under test/fixtures/
+// (both fail/ and succeed/). All of test/ is excluded from the root tsconfig
+// (which must stay green for `yarn typecheck`/`yarn build`); this project is
+// the one place these fixtures ARE typechecked, so the rule-drift harness can
+// typecheck and typed-lint them on demand — the strictTypeChecked ESLint rules
+// need a real project to resolve types against.
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
@@ -15,10 +15,9 @@
     // rule-drift snapshot.
     "types": ["node"]
   },
-  // The root tsconfig excludes test/fixtures/fail so it never breaks the
-  // green `yarn typecheck`/`yarn build`. This project is the one place those
-  // fixtures ARE typechecked, so its own exclude must clear that inherited
-  // entry — otherwise the include below resolves to zero inputs (TS18003).
+  // The root tsconfig excludes all of test/, so this project must set its own
+  // exclude to clear that inherited entry — otherwise the include below
+  // resolves to zero inputs (TS18003).
   "exclude": ["../node_modules", "../dist"],
   "include": ["fixtures/**/*.ts"]
 }
