@@ -8,16 +8,18 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "noEmit": true,
-    // The fixtures import node: builtins and reference globals like `process`.
-    // The root tsconfig gets @types/node ambiently via its broad `**/*.d.ts`
-    // include; this narrow project must ask for the node types explicitly, or
-    // every import-bearing fixture emits TS2591 noise that would pollute the
-    // rule-drift snapshot.
+    // The fixtures import node: builtins and use globals like `process`.
+    // @types/node is a transitive dep, and TypeScript's automatic @types
+    // inclusion doesn't reach it from this project, so name it explicitly —
+    // without this every import-bearing fixture emits TS2591 ("Cannot find
+    // name 'node:fs'…") noise that would pollute the rule-drift snapshot.
     "types": ["node"]
   },
-  // The root tsconfig excludes all of test/, so this project must set its own
-  // exclude to clear that inherited entry — otherwise the include below
-  // resolves to zero inputs (TS18003).
+  // `include`/`exclude` in a child fully REPLACE the parent's (they don't
+  // merge). The root excludes all of test/, which would exclude these fixtures;
+  // declaring our own exclude here drops that root exclude, so the include
+  // below resolves the fixtures instead of zero inputs (TS18003). node_modules
+  // and dist are the only paths this project still needs to skip.
   "exclude": ["../node_modules", "../dist"],
   "include": ["fixtures/**/*.ts"]
 }
