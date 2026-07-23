@@ -55,10 +55,15 @@ const PARSE_ERROR = '<parse-error>';
 /** Per-fixture fired rules, keyed by repo-relative fixture path. */
 type DriftSnapshot = Record<string, { eslint: string[]; tsc: string[] }>;
 
+/** One reported problem in ESLint's `--format json` output. */
+interface EslintMessage {
+  ruleId: string | null;
+}
+
 /** One linted file's entry in ESLint's `--format json` report. */
 interface EslintFileResult {
   filePath: string;
-  messages: { ruleId: string | null }[];
+  messages: EslintMessage[];
 }
 
 /** The subset of ESLint's `--format json` report this test reads. */
