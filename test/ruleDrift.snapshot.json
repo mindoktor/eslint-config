@@ -17,6 +17,12 @@
     ],
     "tsc": []
   },
+  "test/fixtures/fail/react/rulesOfHooks.tsx": {
+    "eslint": [
+      "react-hooks/rules-of-hooks"
+    ],
+    "tsc": []
+  },
   "test/fixtures/fail/strictBooleanExpressions.ts": {
     "eslint": [
       "@typescript-eslint/strict-boolean-expressions"
@@ -42,6 +48,38 @@
     "tsc": []
   },
   "test/fixtures/succeed/allowedEdges.ts": {
+    "eslint": [],
+    "tsc": []
+  },
+  "test/fixtures/succeed/consistentTypeImports.ts": {
+    "eslint": [],
+    "tsc": []
+  },
+  "test/fixtures/succeed/importSort.ts": {
+    "eslint": [],
+    "tsc": []
+  },
+  "test/fixtures/succeed/preferTemplate.ts": {
+    "eslint": [],
+    "tsc": []
+  },
+  "test/fixtures/succeed/react/rulesOfHooks.tsx": {
+    "eslint": [],
+    "tsc": []
+  },
+  "test/fixtures/succeed/strictBooleanExpressions.ts": {
+    "eslint": [],
+    "tsc": []
+  },
+  "test/fixtures/succeed/typeError.ts": {
+    "eslint": [],
+    "tsc": []
+  },
+  "test/fixtures/succeed/typeSpecifierStyle.ts": {
+    "eslint": [],
+    "tsc": []
+  },
+  "test/fixtures/succeed/unusedImports.ts": {
     "eslint": [],
     "tsc": []
   }

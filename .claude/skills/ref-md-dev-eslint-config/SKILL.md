@@ -10,7 +10,7 @@ description: >-
   rule-drift snapshot test that guards against rules silently changing.
 metadata:
   author: mindoktor
-  version: "1.3"
+  version: "1.4"
   shareable-skills.owner-prefix: "md"
   shareable-skills.owner: "mindoktor/eslint-config"
   shareable-skills.domain: "dev"
@@ -69,7 +69,8 @@ Before the consumer diff, there is a faster local guard: `yarn test` runs a **ru
 Fixtures pin drift in **both directions**:
 
 - `test/fixtures/fail/` — deliberately-broken code; each file must keep firing its specific rule. Catches a bump silently **weakening or renaming** a rule.
-- `test/fixtures/succeed/` — clean code that exercises the config's **intentional allowances** (e.g. numbers/booleans in template literals, `_`-prefixed unused vars); each file must keep firing **nothing**. Catches a bump making a rule **stricter** so it starts firing on code we mean to allow.
+- `test/fixtures/succeed/` — clean code that must keep firing **nothing**. Two kinds: a **mirror** of each fail fixture (the corrected form of the same violation — e.g. `succeed/preferTemplate.ts` uses a template literal where `fail/preferTemplate.ts` concatenates), plus `allowedEdges.ts` exercising the config's **intentional allowances** (numbers/booleans in template literals, `_`-prefixed unused vars). Catches a bump making a rule **stricter** so it starts firing on code we mean to allow.
+- **React layer:** the React/react-hooks rules only apply via `configs.reactRecommended`, not the default export, so React fixtures live under `fixtures/*/react/` as `.tsx` and the fixtures ESLint config applies `reactRecommended` to that glob. They declare the hooks they use locally (the rules are AST-based) to avoid needing `@types/react`, which this package doesn't depend on.
 
 Working with it:
 

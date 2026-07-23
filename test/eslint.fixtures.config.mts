@@ -8,16 +8,34 @@
 // install — so the snapshot reflects what the shipped config actually does.
 import { defineConfig } from 'eslint/config';
 
-import mindoktorConfig from '../dist/src/index.js';
+import mindoktorDefault, { configs } from '../dist/src/index.js';
 
-export default defineConfig({
-  files: ['**/*.ts'],
-  extends: [mindoktorConfig],
-  languageOptions: {
-    parserOptions: {
-      projectService: false,
-      project: './tsconfig.fixtures.json',
-      tsconfigRootDir: import.meta.dirname,
+export default defineConfig(
+  // Non-React fixtures: the default config (stylistic + recommended).
+  {
+    files: ['**/*.ts'],
+    ignores: ['**/react/**'],
+    extends: [mindoktorDefault],
+    languageOptions: {
+      parserOptions: {
+        projectService: false,
+        project: './tsconfig.fixtures.json',
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
   },
-});
+  // React fixtures (**/react/*.tsx): the opt-in reactRecommended config, so the
+  // react + react-hooks rules are exercised by the drift test — the layer a
+  // react-hooks peer bump would otherwise change unseen.
+  {
+    files: ['**/react/**/*.tsx'],
+    extends: [configs.reactRecommended],
+    languageOptions: {
+      parserOptions: {
+        projectService: false,
+        project: './tsconfig.fixtures.json',
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+);
