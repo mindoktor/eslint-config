@@ -23,10 +23,8 @@ jobs:
         node-version-file: '.nvmrc'
         cache: 'yarn'
     - run: yarn install --frozen-lockfile
-    # Build first: the rule-drift fixtures config (test/eslint.fixtures.config.mts)
-    # imports the built dist/, so lint's typed rules need dist/ to exist to
-    # resolve it — otherwise it's `any` and no-unsafe-member-access fires.
-    - run: yarn build
+    # lint builds dist/ first via its prelint hook (the fixtures config imports
+    # dist/), and test builds via pretest — so no standalone build step is needed.
     - run: yarn lint
     - run: yarn typecheck
     - run: yarn test

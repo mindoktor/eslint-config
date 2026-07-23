@@ -19,7 +19,9 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
+    "prelint": "yarn build",
     "lint": "eslint .",
+    "prelint:fix": "yarn build",
     "lint:fix": "eslint . --fix",
     "build": "tsc",
     "typecheck": "tsc --noEmit",
