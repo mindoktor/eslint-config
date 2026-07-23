@@ -79,15 +79,16 @@ const toRepoRelative = (absolutePath: string) =>
 const sortedUnique = (values: string[]) => [...new Set(values)].sort();
 
 /**
- * Run a fixtures tool (ESLint/tsc) and return its stdout. Both tools exit zero
- * with empty stdout when they find nothing, and exit non-zero with their report
- * on stdout when they do — execFileSync only throws on the non-zero case, and
- * attaches the report as error.stdout.
+ * Run a fixtures tool (ESLint/tsc) and return its stdout. Both exit non-zero
+ * when they report findings and write their report to stdout — execFileSync
+ * throws on the non-zero exit and attaches that report as error.stdout, which
+ * we return. (On a clean run they exit 0: ESLint still prints its JSON report,
+ * tsc prints nothing; either way we return whatever stdout they produced.)
  *
- * A non-zero exit with *empty* stdout is neither: the tool itself failed to run
- * (bad flags, crash, project-resolution error to stderr). Throwing on it is what
- * stops a broken tsc/eslint invocation from being misread as "no findings" and
- * silently false-passing the snapshot.
+ * A non-zero exit with *empty* stdout is the failure case: the tool itself
+ * failed to run (bad flags, crash, project-resolution error to stderr). Throwing
+ * on it stops a broken tsc/eslint invocation from being misread as "no findings"
+ * and silently false-passing the snapshot.
  */
 const runTool = (name: string, args: string[]) => {
   try {
