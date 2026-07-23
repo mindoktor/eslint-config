@@ -1,27 +1,33 @@
-// Rule-drift test.
-//
-// The config in this package has no runtime of its own; its only observable
-// effect is the lint/type output it produces. This test pins that output: it
-// runs ESLint and tsc over a set of fixtures and asserts that the *set of
-// rules/codes that fire per fixture* matches a committed snapshot. It pins
-// drift in both directions:
-//   - fixtures/fail/    — deliberately-broken code; each file must keep firing
-//     its specific rule(s). Catches a bump silently WEAKENING or renaming a
-//     rule (it stops firing).
-//   - fixtures/succeed/ — clean code exercising the config's intentional
-//     allowances; each file must keep firing NOTHING. Catches a bump making a
-//     rule stricter so it starts firing on code we mean to allow.
-// Either direction failing is the guard that keeps the auto-merged weekly
-// Dependabot bumps honest.
-//
-// What is captured is normalized on purpose: only the sorted rule IDs / TS
-// error codes per fixture, never file paths, line/column, or message text.
-// That survives line shifts and tool-version phrasing changes and fails only
-// on real rule drift.
-//
-// Re-baseline after an intentional change: `yarn test:update`
-// (or `node --test --test-update-snapshots` is NOT used — we manage our own
-// JSON snapshot; set UPDATE_SNAPSHOT=1).
+/**
+ * Rule-drift test.
+ *
+ * The config in this package has no runtime of its own; its only observable
+ * effect is the lint/type output it produces. This test pins that output: it
+ * runs ESLint and tsc over a set of fixtures and asserts that the *set of
+ * rules/codes that fire per fixture* matches a committed snapshot. It pins
+ * drift in both directions:
+ *
+ * - `fixtures/fail/` — deliberately-broken code; each file must keep firing its
+ *   specific rule(s). Catches a bump silently WEAKENING or renaming a rule (it
+ *   stops firing).
+ * - `fixtures/succeed/` — clean code exercising the config's intentional
+ *   allowances; each file must keep firing NOTHING. Catches a bump making a
+ *   rule stricter so it starts firing on code we mean to allow.
+ *
+ * Either direction failing is the guard that keeps the auto-merged weekly
+ * Dependabot bumps honest.
+ *
+ * What is captured is normalized on purpose: only the sorted rule IDs / TS
+ * error codes per fixture, never file paths, line/column, or message text.
+ * That survives line shifts and tool-version phrasing changes and fails only
+ * on real rule drift.
+ *
+ * Re-baseline after an intentional change: `yarn test:update` (we manage our
+ * own JSON snapshot and set UPDATE_SNAPSHOT=1; the built-in
+ * `node --test --test-update-snapshots` is NOT used).
+ *
+ * @module
+ */
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
