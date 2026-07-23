@@ -9,14 +9,13 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    # Wait a day after a release before opening a PR, so a bad version's issues
+    # can surface first.
     cooldown:
       default-days: 1
-    # This package's dependencies are all the ESLint ecosystem, which moves in
-    # lockstep (plugins pinned to matching parser/core majors). Group them into
-    # one PR so the whole set is verified against yarn lint/build/typecheck at
-    # once, rather than opening a dozen separate PRs that each shift one piece.
+    # Group all deps into one PR instead of a dozen; the set is verified together.
     groups:
-      eslint-ecosystem:
+      all-dependencies:
         patterns:
           - "*"
 
