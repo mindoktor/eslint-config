@@ -35,71 +35,96 @@ import { dirname, relative, resolve } from 'node:path';
 import { describe, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-const testDir = dirname(fileURLToPath(import.meta.url));
-const repoRoot = resolve(testDir, '..');
+const TEST_DIR = dirname(fileURLToPath(import.meta.url));
+const REPO_ROOT = resolve(TEST_DIR, '..');
 // Cover both fail/ and succeed/ — ESLint's JSON formatter emits an entry for
 // every linted file (clean files included, with an empty messages array), so a
 // succeed fixture lands in the snapshot as { eslint: [], tsc: [] }.
-const fixturesDir = resolve(testDir, 'fixtures');
-const snapshotPath = resolve(testDir, 'ruleDrift.snapshot.json');
+const FIXTURES_DIR = resolve(TEST_DIR, 'fixtures');
+const SNAPSHOT_PATH = resolve(TEST_DIR, 'ruleDrift.snapshot.json');
 
 // A single `tsc --pretty false` diagnostic line, capturing the file path and
 // the TS error code: `path/to/file.ts(12,5): error TS2322: ...`.
-const tscDiagnosticPattern = /^(.+\.ts)\(\d+,\d+\): error (TS\d+):/;
-const shouldUpdate = process.env.UPDATE_SNAPSHOT === '1';
+const TSC_DIAGNOSTIC_PATTERN = /^(.+\.ts)\(\d+,\d+\): error (TS\d+):/;
+const SHOULD_UPDATE = process.env.UPDATE_SNAPSHOT === '1';
+
+// Surfaced in place of a null ESLint ruleId (a parse/internal error) so a
+// fixture that stops parsing fails loudly rather than looking rule-free.
+const PARSE_ERROR = '<parse-error>';
 
 /** Per-fixture fired rules, keyed by repo-relative fixture path. */
 type DriftSnapshot = Record<string, { eslint: string[]; tsc: string[] }>;
 
-const bin = (name: string) => resolve(repoRoot, 'node_modules/.bin', name);
+/** The subset of ESLint's `--format json` report this test reads. */
+type EslintReport = {
+  filePath: string;
+  messages: { ruleId: string | null }[];
+}[];
 
-const relFixture = (absolutePath: string) =>
-  relative(repoRoot, absolutePath).split('\\').join('/');
+const binary = (name: string) => resolve(REPO_ROOT, 'node_modules/.bin', name);
+
+const toRepoRelative = (absolutePath: string) =>
+  relative(REPO_ROOT, absolutePath).split('\\').join('/');
+
+const sortedUnique = (values: string[]) => [...new Set(values)].sort();
+
+/**
+ * Run a fixtures tool (ESLint/tsc) and return its stdout. Both tools exit
+ * non-zero when they report findings — the expected case here — and still write
+ * their report to stdout, which execFileSync attaches to the thrown error.
+ *
+ * A tool that exits non-zero with *empty* stdout genuinely failed to run (bad
+ * flags, crash), so `onEmptyStdout` decides what that means: ESLint rethrows
+ * (empty JSON is unusable), tsc treats it as "no diagnostics".
+ */
+const runTool = (
+  name: string,
+  args: string[],
+  onEmptyStdout: 'throw' | 'treat-as-empty',
+) => {
+  try {
+    return execFileSync(binary(name), args, {
+      cwd: REPO_ROOT,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+  } catch (error) {
+    const stdout = (error as { stdout?: string }).stdout;
+    if (typeof stdout === 'string' && stdout.length > 0) {
+      return stdout;
+    }
+    if (onEmptyStdout === 'throw') {
+      throw error;
+    }
+    return '';
+  }
+};
 
 /**
  * Run ESLint over the fixtures with the dedicated fixtures config and return
- * a map of fixture path → sorted unique rule IDs that fired. A `null` ruleId
- * (a parse/internal error) is surfaced as `<parse-error>` so a broken fixture
- * fails loudly rather than looking rule-free.
+ * a map of fixture path → sorted unique rule IDs that fired.
  */
 const collectEslint = () => {
-  let raw: string;
-  try {
-    raw = execFileSync(
-      bin('eslint'),
-      [
-        '--no-config-lookup',
-        '--config',
-        resolve(testDir, 'eslint.fixtures.config.mts'),
-        '--format',
-        'json',
-        fixturesDir,
-      ],
-      { cwd: repoRoot, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] },
-    );
-  } catch (error) {
-    // ESLint exits non-zero when it reports errors (the expected case). Its
-    // JSON report is still on stdout, which execFileSync attaches to the error.
-    const stdout = (error as { stdout?: string }).stdout;
-    if (typeof stdout !== 'string' || stdout.length === 0) {
-      throw error;
-    }
-    raw = stdout;
-  }
+  const raw = runTool(
+    'eslint',
+    [
+      '--no-config-lookup',
+      '--config',
+      resolve(TEST_DIR, 'eslint.fixtures.config.mts'),
+      '--format',
+      'json',
+      FIXTURES_DIR,
+    ],
+    'throw',
+  );
+  const report = JSON.parse(raw) as EslintReport;
 
-  const report = JSON.parse(raw) as {
-    filePath: string;
-    messages: { ruleId: string | null }[];
-  }[];
-
-  const byFixture: Record<string, string[]> = {};
+  const rulesByFixture: Record<string, string[]> = {};
   for (const file of report) {
-    const rules = file.messages.map(
-      (message) => message.ruleId ?? '<parse-error>',
-    );
-    byFixture[relFixture(file.filePath)] = [...new Set(rules)].sort();
+    const rules = file.messages.map((message) => message.ruleId ?? PARSE_ERROR);
+    rulesByFixture[toRepoRelative(file.filePath)] = sortedUnique(rules);
   }
-  return byFixture;
+  return rulesByFixture;
 };
 
 /**
@@ -108,49 +133,41 @@ const collectEslint = () => {
  * stripped so only the code identity is pinned.
  */
 const collectTsc = () => {
-  let output: string;
-  try {
-    output = execFileSync(
-      bin('tsc'),
-      [
-        '--noEmit',
-        '--pretty',
-        'false',
-        '--project',
-        resolve(testDir, 'tsconfig.fixtures.json'),
-      ],
-      { cwd: repoRoot, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] },
-    );
-  } catch (error) {
-    // tsc exits non-zero when it finds type errors (the expected case); the
-    // diagnostics are printed to stdout.
-    const stdout = (error as { stdout?: string }).stdout;
-    output = typeof stdout === 'string' ? stdout : '';
-  }
+  const output = runTool(
+    'tsc',
+    [
+      '--noEmit',
+      '--pretty',
+      'false',
+      '--project',
+      resolve(TEST_DIR, 'tsconfig.fixtures.json'),
+    ],
+    'treat-as-empty',
+  );
 
-  const byFixture: Record<string, string[]> = {};
+  const codesByFixture: Record<string, string[]> = {};
   for (const line of output.split('\n')) {
-    const match = tscDiagnosticPattern.exec(line);
+    const match = TSC_DIAGNOSTIC_PATTERN.exec(line);
     if (!match) {
       continue;
     }
     const [, filePath, code] = match;
-    const key = relFixture(resolve(repoRoot, filePath));
-    (byFixture[key] ??= []).push(code);
+    const fixture = toRepoRelative(resolve(REPO_ROOT, filePath));
+    (codesByFixture[fixture] ??= []).push(code);
   }
-  for (const key of Object.keys(byFixture)) {
-    byFixture[key] = [...new Set(byFixture[key])].sort();
-  }
-  return byFixture;
+  return Object.fromEntries(
+    Object.entries(codesByFixture).map(([fixture, codes]) => [
+      fixture,
+      sortedUnique(codes),
+    ]),
+  );
 };
 
 /** Build the full normalized projection, keys sorted for a stable snapshot. */
 const buildSnapshot = (): DriftSnapshot => {
   const eslint = collectEslint();
   const tsc = collectTsc();
-  const fixtures = [
-    ...new Set([...Object.keys(eslint), ...Object.keys(tsc)]),
-  ].sort();
+  const fixtures = sortedUnique([...Object.keys(eslint), ...Object.keys(tsc)]);
 
   const snapshot: DriftSnapshot = {};
   for (const fixture of fixtures) {
@@ -168,9 +185,9 @@ void describe('rule drift', () => {
   void test('fired rules and TS codes match the committed snapshot', () => {
     const actual = buildSnapshot();
 
-    if (shouldUpdate) {
+    if (SHOULD_UPDATE) {
       writeFileSync(
-        snapshotPath,
+        SNAPSHOT_PATH,
         `${JSON.stringify(actual, null, 2)}\n`,
         'utf8',
       );
@@ -178,7 +195,7 @@ void describe('rule drift', () => {
     }
 
     const expected = JSON.parse(
-      readFileSync(snapshotPath, 'utf8'),
+      readFileSync(SNAPSHOT_PATH, 'utf8'),
     ) as DriftSnapshot;
     assert.deepEqual(
       actual,
