@@ -10,7 +10,8 @@ updates:
     schedule:
       interval: "weekly"
     # Wait a day after a release before opening a PR, so a bad version's issues
-    # can surface first.
+    # can surface first and be more likely already handled (or the package
+    # retracted) by that time.
     cooldown:
       default-days: 1
     # Group all deps into one PR instead of a dozen; the set is verified together.
