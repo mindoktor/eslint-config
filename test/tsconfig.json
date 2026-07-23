@@ -13,9 +13,9 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    // Never emit — this project is for checking only; the root handles the build.
     "noEmit": true,
-    // The test code uses node: builtins and globals (process, etc.).
+    // Named explicitly: this narrow project doesn't get @types/node auto-included
+    // the way the root does, so the test code's node: builtins would fail to resolve.
     "types": ["node"]
   },
   "exclude": ["../node_modules", "../dist"],

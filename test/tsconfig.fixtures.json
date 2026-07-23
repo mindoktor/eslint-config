@@ -8,23 +8,14 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "noEmit": true,
-    // The fixtures import node: builtins and use globals like `process`.
-    // TypeScript's automatic @types inclusion does not pick up @types/node for
-    // this narrow project (it does for the root), so name it explicitly —
-    // without this every import-bearing fixture emits TS2591 ("Cannot find
-    // name 'node:fs'…") noise that would pollute the rule-drift snapshot.
+    // Named explicitly: this narrow project doesn't get @types/node auto-included
+    // the way the root does, so fixtures using node: builtins would fail to resolve.
     "types": ["node"],
-    // React fixtures under fixtures/**/react/ are .tsx; allow JSX so tsc parses
-    // them. They avoid needing @types/react (not a dep of this package) by
-    // declaring the hooks they use locally — the react-hooks rules are AST-based
-    // and fire without React's own types.
+    // React fixtures are .tsx (they declare their own hooks, so no @types/react).
     "jsx": "react-jsx"
   },
-  // A child that omits `exclude` INHERITS the parent's via `extends`; declaring
-  // our own here overrides it. The root excludes all of test/, so without a
-  // local exclude the inherited root exclude swallows these fixtures and the
-  // include resolves to zero inputs (TS18003). Our exclude keeps only
-  // node_modules and dist out, so the include below resolves the fixtures.
+  // Own exclude overrides the inherited one: the root excludes all of test/, and
+  // that inherits here, so without this the fixtures resolve to zero inputs (TS18003).
   "exclude": ["../node_modules", "../dist"],
   "include": ["fixtures/**/*.ts", "fixtures/**/*.tsx"]
 }
