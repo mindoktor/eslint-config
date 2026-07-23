@@ -187,8 +187,8 @@ const buildSnapshot = (): DriftSnapshot => {
   return snapshot;
 };
 
-// node:test's describe/test return promises the runner manages internally; we
-// deliberately do not await them, so mark the top-level call with `void`.
+// The node:test runner awaits the describe/test promises itself, so we must not
+// await them here; `void` marks that as intentional for no-floating-promises.
 void describe('rule drift', () => {
   void test('fired rules and TS codes match the committed snapshot', () => {
     const actual = buildSnapshot();
