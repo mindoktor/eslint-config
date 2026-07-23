@@ -44,8 +44,9 @@ const FIXTURES_DIR = resolve(TEST_DIR, 'fixtures');
 const SNAPSHOT_PATH = resolve(TEST_DIR, 'ruleDrift.snapshot.json');
 
 // A single `tsc --pretty false` diagnostic line, capturing the file path and
-// the TS error code: `path/to/file.ts(12,5): error TS2322: ...`.
-const TSC_DIAGNOSTIC_PATTERN = /^(.+\.ts)\(\d+,\d+\): error (TS\d+):/;
+// the TS error code: `path/to/file.ts(12,5): error TS2322: ...`. Matches both
+// .ts and .tsx (React fixtures), so a .tsx type error is captured too.
+const TSC_DIAGNOSTIC_PATTERN = /^(.+\.tsx?)\(\d+,\d+\): error (TS\d+):/;
 const SHOULD_UPDATE = process.env.UPDATE_SNAPSHOT === '1';
 
 // ESLint reports a parse/internal error with a null ruleId, which would
