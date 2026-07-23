@@ -19,7 +19,7 @@ jobs:
       with:
         # Pin CI to the repo's .nvmrc (v24) rather than always-latest, so CI
         # matches local/dev and a future Node major can't silently break the
-        # rule-drift harness or the auto-merge path.
+        # rule-drift test or the auto-merge path.
         node-version-file: '.nvmrc'
         cache: 'yarn'
     - run: yarn install --frozen-lockfile

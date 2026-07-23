@@ -7,10 +7,10 @@ description: >-
   export, or judging the blast radius of a rule change across consumers.
   Covers the non-standard release model (git-branch-per-version, no npm publish),
   the exported configs, the load-order gotcha, consumer install, and the
-  rule-drift snapshot harness that guards against rules silently changing.
+  rule-drift snapshot test that guards against rules silently changing.
 metadata:
   author: mindoktor
-  version: "1.2"
+  version: "1.3"
   shareable-skills.owner-prefix: "md"
   shareable-skills.owner: "mindoktor/eslint-config"
   shareable-skills.domain: "dev"
@@ -60,9 +60,9 @@ Entry: [`src/index.ts`](../../../src/index.ts) exports a `configs` object with t
 
 ## Verifying a Change Against a Consumer
 
-A config change has no runtime surface of its own; its only observable effect is the lint output it produces in a consumer. `yarn test` (the rule-drift harness below) is the fast first check; it does not prove what the change does to real project code, so for anything beyond a trivial edit, also verify against a real consumer in an **isolated, branched worktree** so you can see the exact before/after and confirm nothing changed that you did not intend.
+A config change has no runtime surface of its own; its only observable effect is the lint output it produces in a consumer. `yarn test` (the rule-drift test below) is the fast first check; it does not prove what the change does to real project code, so for anything beyond a trivial edit, also verify against a real consumer in an **isolated, branched worktree** so you can see the exact before/after and confirm nothing changed that you did not intend.
 
-### Rule-drift harness (`yarn test`)
+### Rule-drift test (`yarn test`)
 
 Before the consumer diff, there is a faster local guard: `yarn test` runs a **rule-drift snapshot test**. It lints and typechecks the fixtures under `test/fixtures/` and asserts that the set of ESLint rule IDs and `tsc` error codes firing per fixture matches the committed `test/ruleDrift.snapshot.json`. The snapshot is normalized — sorted rule IDs / TS codes only, no file paths, line/column, or message text — so it fails only on real rule drift, not on line shifts or tool-version phrasing.
 

@@ -1,13 +1,21 @@
-// Project for the rule-drift harness itself (the .mts test and the .mts
-// fixtures config) — NOT the deliberately-broken fixtures, which live in
-// their own tsconfig.fixtures.json. The root tsconfig excludes all of test/
-// so this tooling never ships in dist/; this project exists so `yarn lint`'s
-// typed rules and a `yarn typecheck` of the harness can resolve it.
+// Project for the test scaffolding itself — the .mts test and the .mts fixtures
+// config — NOT the deliberately-broken fixtures (those have their own
+// tsconfig.fixtures.json).
+//
+// Why a separate project at all: the root tsconfig IS the build (it emits to
+// dist/, which is what ships), and its include globs would sweep up test/, so
+// it excludes test/ to keep the test code out of the published package. But
+// that exclude also means the root can't typecheck or typed-lint this code.
+// One config can't both exclude test/ from the build and include it for
+// checking — so the test code gets this project: same strict rules, noEmit,
+// scoped to test/*.mts. (Deleting this file makes `yarn lint` fail on the .mts
+// files with "not found by the project service".)
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    // Never emit — this project is for checking only; the root handles the build.
     "noEmit": true,
-    // The harness uses node: builtins and globals (process, etc.).
+    // The test code uses node: builtins and globals (process, etc.).
     "types": ["node"]
   },
   "exclude": ["../node_modules", "../dist"],

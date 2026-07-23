@@ -1,9 +1,9 @@
-// Dedicated tsconfig for the rule-drift fixtures under test/fixtures/
-// (both fail/ and succeed/). All of test/ is excluded from the root tsconfig
-// (which must stay green for `yarn typecheck`/`yarn build`); this project is
-// the one place these fixtures ARE typechecked, so the rule-drift harness can
-// typecheck and typed-lint them on demand — the strictTypeChecked ESLint rules
-// need a real project to resolve types against.
+// tsconfig for the rule-drift fixtures under test/fixtures/ (both fail/ and
+// succeed/). Separate from the root on purpose: the fixtures deliberately
+// contain errors (e.g. typeError.ts), so they can't live in the root project
+// that must stay green for `yarn typecheck`/`yarn build`. This project is the
+// one place they ARE typechecked, on demand — the strictTypeChecked ESLint
+// rules need a real TS project to resolve types against.
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
