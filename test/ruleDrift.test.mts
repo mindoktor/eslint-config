@@ -42,6 +42,10 @@ const repoRoot = resolve(testDir, '..');
 // succeed fixture lands in the snapshot as { eslint: [], tsc: [] }.
 const fixturesDir = resolve(testDir, 'fixtures');
 const snapshotPath = resolve(testDir, 'ruleDrift.snapshot.json');
+
+// A single `tsc --pretty false` diagnostic line, capturing the file path and
+// the TS error code: `path/to/file.ts(12,5): error TS2322: ...`.
+const tscDiagnosticPattern = /^(.+\.ts)\(\d+,\d+\): error (TS\d+):/;
 const shouldUpdate = process.env.UPDATE_SNAPSHOT === '1';
 
 /** Per-fixture fired rules, keyed by repo-relative fixture path. */
@@ -125,9 +129,8 @@ const collectTsc = () => {
   }
 
   const byFixture: Record<string, string[]> = {};
-  const linePattern = /^(.+\.ts)\(\d+,\d+\): error (TS\d+):/;
   for (const line of output.split('\n')) {
-    const match = linePattern.exec(line);
+    const match = tscDiagnosticPattern.exec(line);
     if (!match) {
       continue;
     }
