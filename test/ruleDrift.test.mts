@@ -55,11 +55,14 @@ const PARSE_ERROR = '<parse-error>';
 /** Per-fixture fired rules, keyed by repo-relative fixture path. */
 type DriftSnapshot = Record<string, { eslint: string[]; tsc: string[] }>;
 
-/** The subset of ESLint's `--format json` report this test reads. */
-type EslintReport = {
+/** One linted file's entry in ESLint's `--format json` report. */
+interface EslintFileResult {
   filePath: string;
   messages: { ruleId: string | null }[];
-}[];
+}
+
+/** The subset of ESLint's `--format json` report this test reads. */
+type EslintReport = EslintFileResult[];
 
 const binary = (name: string) => resolve(REPO_ROOT, 'node_modules/.bin', name);
 
