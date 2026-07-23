@@ -48,8 +48,9 @@ const SNAPSHOT_PATH = resolve(TEST_DIR, 'ruleDrift.snapshot.json');
 const TSC_DIAGNOSTIC_PATTERN = /^(.+\.ts)\(\d+,\d+\): error (TS\d+):/;
 const SHOULD_UPDATE = process.env.UPDATE_SNAPSHOT === '1';
 
-// Surfaced in place of a null ESLint ruleId (a parse/internal error) so a
-// fixture that stops parsing fails loudly rather than looking rule-free.
+// ESLint reports a parse/internal error with a null ruleId, which would
+// otherwise collapse into an empty rule set and look like a clean pass; stand
+// in this sentinel so a fixture that stops parsing shows up as drift instead.
 const PARSE_ERROR = '<parse-error>';
 
 /** Per-fixture fired rules, keyed by repo-relative fixture path. */
