@@ -40,8 +40,8 @@ Always use the project's standard commands. **Never bypass them with `npx`, dire
 ### Standard commands
 
 ```bash
-yarn lint            # ESLint over this repo (dogfoods the config)
-yarn lint:fix        # Auto-fix
+yarn lint            # ESLint over this repo (dogfoods the config; prelint builds first)
+yarn lint:fix        # Auto-fix (also builds first)
 yarn build           # tsc → dist/
 yarn typecheck       # tsc --noEmit
 yarn test            # rule-drift snapshot test (pretest builds first)

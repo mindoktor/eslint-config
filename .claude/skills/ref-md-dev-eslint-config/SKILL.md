@@ -10,7 +10,7 @@ description: >-
   rule-drift snapshot test that guards against rules silently changing.
 metadata:
   author: mindoktor
-  version: "1.4"
+  version: "1.5"
   shareable-skills.owner-prefix: "md"
   shareable-skills.owner: "mindoktor/eslint-config"
   shareable-skills.domain: "dev"
@@ -57,6 +57,7 @@ Entry: [`src/index.ts`](../../../src/index.ts) exports a `configs` object with t
 - **A rule change here propagates to every consumer** (patient-app, clinic-app, and others) on their next version bump. Weigh any rule addition or severity change against that blast radius; prefer a narrowly-scoped, well-justified change and note it in the PR.
 - **`no-unused-vars` is intentionally handled by `unused-imports`**, not typescript-eslint — `recommended.ts` turns the tseslint rule off and delegates. Don't "restore" the tseslint rule.
 - **`dist` is gitignored** and only committed onto a version branch at release time. Do not commit `dist/` to `develop`.
+- **Linting needs a build.** The rule-drift fixtures config imports the built `dist/`, so `yarn lint` on a clean checkout would fail without it — `prelint`/`prelint:fix` hooks build first, which is why CI needs no separate build step.
 
 ## Verifying a Change Against a Consumer
 
