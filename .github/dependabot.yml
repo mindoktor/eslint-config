@@ -19,6 +19,12 @@ updates:
       all-dependencies:
         patterns:
           - "*"
+    # Majors get a human. A major can be clean here yet break a consumer, which
+    # this repo's own checks can't see — and grouped auto-merge would otherwise
+    # land it unattended. Bump majors deliberately in their own PR.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -26,3 +32,8 @@ updates:
       interval: "weekly"
     cooldown:
       default-days: 1
+    # Majors get a human here too: an action major (e.g. checkout v4 -> v5) can
+    # break the workflow that is supposed to be gating the merge.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]

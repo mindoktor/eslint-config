@@ -10,7 +10,7 @@ description: >-
   rule-drift snapshot test that guards against rules silently changing.
 metadata:
   author: mindoktor
-  version: "1.5"
+  version: "1.6"
   shareable-skills.owner-prefix: "md"
   shareable-skills.owner: "mindoktor/eslint-config"
   shareable-skills.domain: "dev"
@@ -77,7 +77,7 @@ Working with it:
 
 - **When you change a rule on purpose:** the snapshot will drift and `yarn test` will fail. Re-baseline with `yarn test:update` and review the snapshot diff — that diff is a precise record of what your change altered, and it belongs in the PR.
 - **When a rule fires that no fixture covers:** add a fixture in `test/fixtures/fail/` (header comment naming the intended rule); when the config newly *allows* something, add a `test/fixtures/succeed/` case. Then `yarn test:update` to pin it. A succeed fixture must pass honestly — never with an `eslint-disable`, or it proves nothing.
-- **Why it exists:** it catches a dependency bump silently changing enforcement — weakening a rule, or tightening one onto allowed code — a change that passes `yarn lint`/`typecheck`/`build` green but ships altered behavior to consumers. That matters because Dependabot auto-merges green bumps weekly (`.github/dependabot.yml` + the `dependabot-automerge` job in `ci.yml`), so a green-but-drifted bump would otherwise merge itself.
+- **Why it exists:** it catches a dependency bump silently changing enforcement — weakening a rule, or tightening one onto allowed code — a change that passes `yarn lint`/`typecheck`/`build` green but ships altered behavior to consumers. That matters because Dependabot auto-merges green **patch/minor** bumps weekly (`.github/dependabot.yml` + the `dependabot-automerge` job in `ci.yml`), so a green-but-drifted bump would otherwise merge itself. Majors are `ignore`d in `dependabot.yml` — they need a deliberate human bump, since a major can be clean here yet break a consumer.
 
 Use whichever consumer repo is cloned locally. Preferred is **CLINIC_APP** (in the `mindoktor` repo), which depends on this package by git URL and is simple to repoint; the `mindoktor-app` repo is the alternative. Locate the checkout rather than assuming a path (it is a working directory in this session), and always work in a **worktree**, never the consumer's main checkout, so its normal state is untouched.
 
