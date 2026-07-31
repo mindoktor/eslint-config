@@ -9,11 +9,13 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    # Wait a day after a release before opening a PR, so a bad version's issues
-    # can surface first and be more likely already handled (or the package
-    # retracted) by that time.
+    # Wait two weeks after a release before opening a PR, so a bad version's
+    # issues can surface first and be more likely already handled (or the
+    # package retracted) by that time. Long soak is cheap here: this package is
+    # pulled by consumers rarely and deliberately, so slow uptake costs little
+    # while shortening the window in which a malicious release auto-merges.
     cooldown:
-      default-days: 1
+      default-days: 14
     # Group all deps into one PR instead of a dozen; the set is verified together.
     groups:
       all-dependencies:
@@ -31,7 +33,7 @@ updates:
     schedule:
       interval: "weekly"
     cooldown:
-      default-days: 1
+      default-days: 14
     # Majors get a human here too: an action major (e.g. checkout v4 -> v5) can
     # break the workflow that is supposed to be gating the merge.
     ignore:

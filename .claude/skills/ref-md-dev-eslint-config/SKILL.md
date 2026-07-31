@@ -10,7 +10,7 @@ description: >-
   rule-drift snapshot test that guards against rules silently changing.
 metadata:
   author: mindoktor
-  version: "1.6"
+  version: "1.1"
   shareable-skills.owner-prefix: "md"
   shareable-skills.owner: "mindoktor/eslint-config"
   shareable-skills.domain: "dev"

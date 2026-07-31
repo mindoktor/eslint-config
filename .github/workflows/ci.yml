@@ -14,15 +14,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    # Actions are pinned to commit SHAs, not mutable tags: a tag can be moved to
+    # point at new code, so a tag ref is not a fixed thing to review. Dependabot
+    # keeps these SHAs current (see the github-actions block in dependabot.yml).
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+    - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
       with:
         # Pin CI to the repo's .nvmrc (v24) rather than always-latest, so CI
         # matches local/dev and a future Node major can't silently break the
         # rule-drift test or the auto-merge path.
         node-version-file: '.nvmrc'
         cache: 'yarn'
-    - run: yarn install --frozen-lockfile
+    # --ignore-scripts: don't run dependency install hooks. It closes the
+    # install-time hook vector, which matters most for auto-merged bumps. Nothing
+    # here needs them — the one dep declaring a postinstall (unrs-resolver) gets
+    # its native binding from optionalDependencies instead.
+    - run: yarn install --frozen-lockfile --ignore-scripts
     # lint builds dist/ first via its prelint hook (the fixtures config imports
     # dist/), and test builds via pretest — so no standalone build step is needed.
     - run: yarn lint
