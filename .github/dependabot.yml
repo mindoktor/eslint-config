@@ -34,8 +34,11 @@ updates:
       interval: "weekly"
     cooldown:
       default-days: 14
-    # Majors get a human here too: an action major (e.g. checkout v4 -> v5) can
-    # break the workflow that is supposed to be gating the merge.
+    # Majors get a human here too: an action major (e.g. checkout v7 -> v8) can
+    # break the workflow that is supposed to be gating the merge. The cost is
+    # that a major goes unnoticed until someone looks — action majors move the
+    # runtime (Node 20 -> 24), and an old major line can stop getting backports
+    # entirely, so check these when touching CI rather than assuming they age.
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
