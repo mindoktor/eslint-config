@@ -1,0 +1,86 @@
+{
+  "test/fixtures/fail/consistentTypeImports.ts": {
+    "eslint": [
+      "@typescript-eslint/consistent-type-imports"
+    ],
+    "tsc": []
+  },
+  "test/fixtures/fail/importSort.ts": {
+    "eslint": [
+      "simple-import-sort/imports"
+    ],
+    "tsc": []
+  },
+  "test/fixtures/fail/preferTemplate.ts": {
+    "eslint": [
+      "prefer-template"
+    ],
+    "tsc": []
+  },
+  "test/fixtures/fail/react/rulesOfHooks.tsx": {
+    "eslint": [
+      "react-hooks/rules-of-hooks"
+    ],
+    "tsc": []
+  },
+  "test/fixtures/fail/strictBooleanExpressions.ts": {
+    "eslint": [
+      "@typescript-eslint/strict-boolean-expressions"
+    ],
+    "tsc": []
+  },
+  "test/fixtures/fail/typeError.ts": {
+    "eslint": [],
+    "tsc": [
+      "TS2322"
+    ]
+  },
+  "test/fixtures/fail/typeSpecifierStyle.ts": {
+    "eslint": [
+      "import/consistent-type-specifier-style"
+    ],
+    "tsc": []
+  },
+  "test/fixtures/fail/unusedImports.ts": {
+    "eslint": [
+      "unused-imports/no-unused-imports"
+    ],
+    "tsc": []
+  },
+  "test/fixtures/succeed/allowedEdges.ts": {
+    "eslint": [],
+    "tsc": []
+  },
+  "test/fixtures/succeed/consistentTypeImports.ts": {
+    "eslint": [],
+    "tsc": []
+  },
+  "test/fixtures/succeed/importSort.ts": {
+    "eslint": [],
+    "tsc": []
+  },
+  "test/fixtures/succeed/preferTemplate.ts": {
+    "eslint": [],
+    "tsc": []
+  },
+  "test/fixtures/succeed/react/rulesOfHooks.tsx": {
+    "eslint": [],
+    "tsc": []
+  },
+  "test/fixtures/succeed/strictBooleanExpressions.ts": {
+    "eslint": [],
+    "tsc": []
+  },
+  "test/fixtures/succeed/typeError.ts": {
+    "eslint": [],
+    "tsc": []
+  },
+  "test/fixtures/succeed/typeSpecifierStyle.ts": {
+    "eslint": [],
+    "tsc": []
+  },
+  "test/fixtures/succeed/unusedImports.ts": {
+    "eslint": [],
+    "tsc": []
+  }
+}

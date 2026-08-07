@@ -34,5 +34,10 @@ export default defineConfig(
     // scripts they contain (which aren't part of this package's source).
     '.claude/',
     '.agents/',
+    // Rule-drift fixtures (both fail/ and succeed/). The default `yarn lint`
+    // must stay green and these live in their own TS project, so they are
+    // ignored here; the rule-drift test lints them on demand with
+    // test/eslint.fixtures.config.mts.
+    'test/fixtures/',
   ]),
 );

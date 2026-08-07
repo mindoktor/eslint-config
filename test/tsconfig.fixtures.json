@@ -1,0 +1,21 @@
+// tsconfig for the rule-drift fixtures under test/fixtures/ (both fail/ and
+// succeed/). Separate from the root on purpose: the fixtures deliberately
+// contain errors (e.g. typeError.ts), so they can't live in the root project
+// that must stay green for `yarn typecheck`/`yarn build`. This project is the
+// one place they ARE typechecked, on demand — the strictTypeChecked ESLint
+// rules need a real TS project to resolve types against.
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    // Named explicitly: this narrow project doesn't get @types/node auto-included
+    // the way the root does, so fixtures using node: builtins would fail to resolve.
+    "types": ["node"],
+    // React fixtures are .tsx (they declare their own hooks, so no @types/react).
+    "jsx": "react-jsx"
+  },
+  // Own exclude overrides the inherited one: the root excludes all of test/, and
+  // that inherits here, so without this the fixtures resolve to zero inputs (TS18003).
+  "exclude": ["../node_modules", "../dist"],
+  "include": ["fixtures/**/*.ts", "fixtures/**/*.tsx"]
+}

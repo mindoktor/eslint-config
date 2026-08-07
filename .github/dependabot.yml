@@ -1,0 +1,44 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Wait two weeks after a release before opening a PR, so a bad version's
+    # issues can surface first and be more likely already handled (or the
+    # package retracted) by that time. Long soak is cheap here: this package is
+    # pulled by consumers rarely and deliberately, so slow uptake costs little
+    # while shortening the window in which a malicious release auto-merges.
+    cooldown:
+      default-days: 14
+    # Group all deps into one PR instead of a dozen; the set is verified together.
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
+    # Majors get a human. A major can be clean here yet break a consumer, which
+    # this repo's own checks can't see — and grouped auto-merge would otherwise
+    # land it unattended. Bump majors deliberately in their own PR.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 14
+    # Majors get a human here too: an action major (e.g. checkout v7 -> v8) can
+    # break the workflow that is supposed to be gating the merge. The cost is
+    # that a major goes unnoticed until someone looks — action majors move the
+    # runtime (Node 20 -> 24), and an old major line can stop getting backports
+    # entirely, so check these when touching CI rather than assuming they age.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]

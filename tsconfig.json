@@ -2,6 +2,7 @@
   "include": [
     "**/*.js",
     "**/*.mjs",
+    "**/*.mts",
     "**/*.jsx",
     "**/*.ts",
     "**/*.d.ts",
@@ -9,7 +10,17 @@
     ".release-it.ts",
     "eslint.config.ts"
   ],
-  "exclude": ["node_modules", "dist", "scripts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "scripts",
+    // The rule-drift test is dev tooling, not package source: it must not be
+    // emitted into dist/ (which is what ships) nor typechecked by the root
+    // `yarn build`/`yarn typecheck`. It carries its own projects instead —
+    // test/tsconfig.json for the test code, test/tsconfig.fixtures.json for the
+    // fail/ and succeed/ fixtures.
+    "test"
+  ],
   "compilerOptions": {
     "outDir": "./dist",
     "declaration": true,

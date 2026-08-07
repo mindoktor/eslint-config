@@ -6,10 +6,11 @@ description: >-
   running release-it, changing an exported config or a lint rule, adding a config
   export, or judging the blast radius of a rule change across consumers.
   Covers the non-standard release model (git-branch-per-version, no npm publish),
-  the exported configs, the load-order gotcha, and consumer install.
+  the exported configs, the load-order gotcha, consumer install, and the
+  rule-drift snapshot test that guards against rules silently changing.
 metadata:
   author: mindoktor
-  version: "1.0"
+  version: "1.1"
   shareable-skills.owner-prefix: "md"
   shareable-skills.owner: "mindoktor/eslint-config"
   shareable-skills.domain: "dev"
@@ -56,10 +57,27 @@ Entry: [`src/index.ts`](../../../src/index.ts) exports a `configs` object with t
 - **A rule change here propagates to every consumer** (patient-app, clinic-app, and others) on their next version bump. Weigh any rule addition or severity change against that blast radius; prefer a narrowly-scoped, well-justified change and note it in the PR.
 - **`no-unused-vars` is intentionally handled by `unused-imports`**, not typescript-eslint — `recommended.ts` turns the tseslint rule off and delegates. Don't "restore" the tseslint rule.
 - **`dist` is gitignored** and only committed onto a version branch at release time. Do not commit `dist/` to `develop`.
+- **Linting needs a build.** The rule-drift fixtures config imports the built `dist/`, so `yarn lint` on a clean checkout would fail without it — `prelint`/`prelint:fix` hooks build first, which is why CI needs no separate build step.
 
 ## Verifying a Change Against a Consumer
 
-A config change has no runtime surface of its own; its only observable effect is the lint output it produces in a consumer. `yarn lint` against `examples/` is a quick first check, but it does not prove what the change does to real project code. For anything beyond a trivial edit, verify against a real consumer in an **isolated, branched worktree** so you can see the exact before/after and confirm nothing changed that you did not intend.
+A config change has no runtime surface of its own; its only observable effect is the lint output it produces in a consumer. `yarn test` (the rule-drift test below) is the fast first check; it does not prove what the change does to real project code, so for anything beyond a trivial edit, also verify against a real consumer in an **isolated, branched worktree** so you can see the exact before/after and confirm nothing changed that you did not intend.
+
+### Rule-drift test (`yarn test`)
+
+Before the consumer diff, there is a faster local guard: `yarn test` runs a **rule-drift snapshot test**. It lints and typechecks the fixtures under `test/fixtures/` and asserts that the set of ESLint rule IDs and `tsc` error codes firing per fixture matches the committed `test/ruleDrift.snapshot.json`. The snapshot is normalized — sorted rule IDs / TS codes only, no file paths, line/column, or message text — so it fails only on real rule drift, not on line shifts or tool-version phrasing.
+
+Fixtures pin drift in **both directions**:
+
+- `test/fixtures/fail/` — deliberately-broken code; each file must keep firing its specific rule. Catches a bump silently **weakening or renaming** a rule.
+- `test/fixtures/succeed/` — clean code that must keep firing **nothing**. Two kinds: a **mirror** of each fail fixture (the corrected form of the same violation — e.g. `succeed/preferTemplate.ts` uses a template literal where `fail/preferTemplate.ts` concatenates), plus `allowedEdges.ts` exercising the config's **intentional allowances** (numbers/booleans in template literals, `_`-prefixed unused vars). Catches a bump making a rule **stricter** so it starts firing on code we mean to allow.
+- **React layer:** the React/react-hooks rules only apply via `configs.reactRecommended`, not the default export, so React fixtures live under `fixtures/*/react/` as `.tsx` and the fixtures ESLint config applies `reactRecommended` to that glob. They declare the hooks they use locally (the rules are AST-based) to avoid needing `@types/react`, which this package doesn't depend on.
+
+Working with it:
+
+- **When you change a rule on purpose:** the snapshot will drift and `yarn test` will fail. Re-baseline with `yarn test:update` and review the snapshot diff — that diff is a precise record of what your change altered, and it belongs in the PR.
+- **When a rule fires that no fixture covers:** add a fixture in `test/fixtures/fail/` (header comment naming the intended rule); when the config newly *allows* something, add a `test/fixtures/succeed/` case. Then `yarn test:update` to pin it. A succeed fixture must pass honestly — never with an `eslint-disable`, or it proves nothing.
+- **Why it exists:** it catches a dependency bump silently changing enforcement — weakening a rule, or tightening one onto allowed code — a change that passes `yarn lint`/`typecheck`/`build` green but ships altered behavior to consumers. That matters because Dependabot auto-merges green **patch/minor** bumps weekly (`.github/dependabot.yml` + the `dependabot-automerge` job in `ci.yml`), so a green-but-drifted bump would otherwise merge itself. Majors are `ignore`d in `dependabot.yml` — they need a deliberate human bump, since a major can be clean here yet break a consumer.
 
 Use whichever consumer repo is cloned locally. Preferred is **CLINIC_APP** (in the `mindoktor` repo), which depends on this package by git URL and is simple to repoint; the `mindoktor-app` repo is the alternative. Locate the checkout rather than assuming a path (it is a working directory in this session), and always work in a **worktree**, never the consumer's main checkout, so its normal state is untouched.
 
@@ -75,7 +93,7 @@ Use whichever consumer repo is cloned locally. Preferred is **CLINIC_APP** (in t
 
 ## Standard Commands
 
-`yarn lint` · `yarn lint:fix` · `yarn build` (tsc → `dist/`) · `yarn typecheck` · `yarn cleanbuild` · `yarn release`. For how to verify a change's real effect, see *Verifying a Change Against a Consumer* above.
+`yarn lint` · `yarn lint:fix` · `yarn build` (tsc → `dist/`) · `yarn typecheck` · `yarn test` (rule-drift snapshot) · `yarn test:update` (re-baseline it) · `yarn cleanbuild` · `yarn release`. For how to verify a change's real effect, see *Verifying a Change Against a Consumer* above.
 
 ## Related Skills
 

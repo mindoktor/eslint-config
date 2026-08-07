@@ -1,4 +1,6 @@
 name: CI Checks
+
+# Read-only by default; the auto-merge job below elevates its own permissions.
 permissions:
   contents: read
 
@@ -12,12 +14,49 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    # Actions are pinned to commit SHAs, not mutable tags: a tag can be moved to
+    # point at new code, so a tag ref is not a fixed thing to review. Dependabot
+    # keeps these SHAs current within the major line (see the github-actions
+    # block in dependabot.yml) — crossing a major stays a deliberate manual bump.
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
       with:
-        node-version: current
+        # Pin CI to the repo's .nvmrc (v24) rather than always-latest, so CI
+        # matches local/dev and a future Node major can't silently break the
+        # rule-drift test or the auto-merge path.
+        node-version-file: '.nvmrc'
         cache: 'yarn'
-    - run: yarn install --frozen-lockfile
+    # --ignore-scripts: don't run dependency install hooks. It closes the
+    # install-time hook vector, which matters most for auto-merged bumps. Nothing
+    # here needs them — the one dep declaring a postinstall (unrs-resolver) gets
+    # its native binding from optionalDependencies instead.
+    - run: yarn install --frozen-lockfile --ignore-scripts
+    # lint builds dist/ first via its prelint hook (the fixtures config imports
+    # dist/), and test builds via pretest — so no standalone build step is needed.
     - run: yarn lint
     - run: yarn typecheck
-    - run: yarn build
+    - run: yarn test
+
+  # Auto-merge Dependabot PRs, gated on the checks passing via `needs:`. Kept a
+  # separate job (not a trailing step) so the checks job stays read-only and the
+  # write-capable token exists only here — the untrusted dependency changes run
+  # under the read-only checks job, never under this write-scoped one.
+  #
+  # NOTE: full auto-merge also needs two repo settings this workflow can't set:
+  # the "Allow auto-merge" repo setting, and a branch rule on develop with a
+  # required check — without a pending requirement, a PR that isn't immediately
+  # mergeable has no deferred merge to enable. See GitHub's auto-merge docs:
+  # https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request
+  dependabot-automerge:
+    needs: lint_typecheck
+    if: github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]' && github.event.pull_request.base.ref == 'develop'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+    - name: Enable auto-merge for Dependabot PRs
+      run: gh pr merge --auto --squash "$PR_URL"
+      env:
+        PR_URL: ${{ github.event.pull_request.html_url }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
