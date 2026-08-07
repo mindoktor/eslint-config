@@ -69,9 +69,9 @@
     "eslint-plugin-simple-import-sort": "^14.0.0",
     "eslint-plugin-unused-imports": "^4.4.1",
     "jiti": "^2.7.0",
-    "prettier": "^3.9.5",
+    "prettier": "^3.9.6",
     "release-it": "^20.2.1",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.64.0"
+    "typescript-eslint": "^8.65.0"
   }
 }
