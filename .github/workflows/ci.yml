@@ -11,7 +11,7 @@ on:
 
 jobs:
   lint_typecheck:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     steps:
     # Actions are pinned to commit SHAs, not mutable tags: a tag can be moved to
@@ -50,7 +50,7 @@ jobs:
   dependabot-automerge:
     needs: lint_typecheck
     if: github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]' && github.event.pull_request.base.ref == 'develop'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       contents: write
       pull-requests: write
